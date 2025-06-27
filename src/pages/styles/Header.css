@@ -1,0 +1,87 @@
+:root {
+  --background: 0 0% 100%;
+  --foreground: 220 17% 17%;
+  --primary: 165 65% 35%;
+  --primary-foreground: 0 0% 100%;
+  --primary-light: 165 65% 45%;
+  --muted: 160 33% 95%;
+  --muted-foreground: 220 10% 40%;
+  --border: 160 5% 90%;
+}
+
+.dark {
+  --background: 220 20% 13%;
+  --foreground: 0 0% 98%;
+  --primary: 165 65% 40%;
+  --primary-foreground: 0 0% 100%;
+  --primary-light: 165 65% 50%;
+  --muted: 170 20% 18%;
+  --muted-foreground: 160 15% 70%;
+  --border: 165 15% 22%;
+}
+
+/* Base styles for header/footer */
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar (used in header/overall layout) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.5);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.7);
+}:root {
+  --background: 0 0% 100%;
+  --foreground: 220 17% 17%;
+  --primary: 165 65% 35%;
+  --primary-foreground: 0 0% 100%;
+  --primary-light: 165 65% 45%;
+  --muted: 160 33% 95%;
+  --muted-foreground: 220 10% 40%;
+  --border: 160 5% 90%;
+}
+
+.dark {
+  --background: 220 20% 13%;
+  --foreground: 0 0% 98%;
+  --primary: 165 65% 40%;
+  --primary-foreground: 0 0% 100%;
+  --primary-light: 165 65% 50%;
+  --muted: 170 20% 18%;
+  --muted-foreground: 160 15% 70%;
+  --border: 165 15% 22%;
+}
+
+/* Base styles for header/footer */
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar (used in header/overall layout) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.5);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.7);
+}
