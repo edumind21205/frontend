@@ -7,7 +7,7 @@ export default function Work() {
 
   return (
     <motion.div
-      className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-8 md:p-12 mb-16"
+      className="bg-slate-50  rounded-2xl p-8 md:p-12 mb-16"
       ref={ref}
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}

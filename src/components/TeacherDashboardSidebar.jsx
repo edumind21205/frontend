@@ -91,7 +91,7 @@ const TeacherDashboardSidebar = () => {
           aria-label="Go to landing page"
         >
           <img
-            src="/assets/logo.png"
+            src="/assets/logo2.png"
             alt="EduMids Logo"
             width={collapsed ? 36 : 48}
             height={collapsed ? 36 : 48}

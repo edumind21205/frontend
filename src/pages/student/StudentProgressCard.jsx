@@ -279,7 +279,7 @@ const StudentProgressCard = () => {
                 </div>
                 <div className="mt-4">
                   <a
-                    href={`https://eduminds-production-180d.up.railway.app/api/certificates/${selectedCourseId}`}
+                    // href={`https://eduminds-production-180d.up.railway.app/api/certificates/${selectedCourseId}`}
                     className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -317,9 +317,8 @@ const StudentProgressCard = () => {
                           />
                         )}
                         {resourceType === "PDF" && resourceUrl && (
-                          // Always render PDFs as links, never as images
                           <button
-                            onClick={() => handleDownloadLesson(lessonId, displayName, resourceType)}
+                            onClick={() => window.open(resourceUrl, "_blank", "noopener,noreferrer")}
                             className="underline text-blue-600 text-xs ml-1 font-semibold"
                             disabled={downloadingLessonId === lessonId}
                             style={{ cursor: "pointer", background: "none", border: "none", padding: 0 }}
@@ -336,14 +335,6 @@ const StudentProgressCard = () => {
                           >
                             Open Link
                           </a>
-                        )}
-                        {/* Optionally, if you want to show images for image files (not PDFs): */}
-                        {resourceType !== "PDF" && resourceUrl && isImageFile(resourceUrl) && (
-                          <img
-                            src={resourceUrl}
-                            alt={displayName}
-                            className="w-40 h-24 rounded mt-1 object-contain border"
-                          />
                         )}
                       </div>
                       <div className="flex items-center gap-2 mt-2">

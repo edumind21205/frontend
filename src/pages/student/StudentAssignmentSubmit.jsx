@@ -89,21 +89,20 @@ const StudentAssignmentSubmit = () => {
     if (!token) return alert("You must be logged in to submit.");
     const id = assignmentId || selectedAssignmentId;
 
-    // upload file to Cloudinary
+    // upload file to Cloudinary (use /raw/upload for PDFs)
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "upload");
-    const cloudName = "dctpna06w";
-    const uploadPreset = "upload";
-    if (!cloudName || !uploadPreset) {
-      alert("Cloudinary credentials are not set. Please contact admin.");
-      return;
-    }
-    const cloudRes = await axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-      formData
-    );
-    const fileUrl = cloudRes.data.secure_url;
+    formData.append("upload_preset", "upload"); // 'upload' is your unsigned preset name
+
+    const cloudName = "dgedargei";
+    const isPDF = file && file.type === "application/pdf";
+    const uploadUrl = isPDF
+      ? `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`
+      : `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
+
+    const response = await axios.post(uploadUrl, formData);
+
+    const fileUrl = response.data.secure_url;
 
     // submit to backend
     await axios.post(
@@ -177,41 +176,45 @@ const StudentAssignmentSubmit = () => {
                       <span className="text-green-600 font-semibold">Submitted</span>
                     ) : (
                       <>
-                        <input
-                          type="file"
-                          onChange={e =>
-                            setFileInputs(inputs => ({
-                              ...inputs,
-                              [a._id]: e.target.files[0]
-                            }))
-                          }
-                          className="mb-2"
-                        />
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full">
+                          <input
+                            type="file"
+                            onChange={e =>
+                              setFileInputs(inputs => ({
+                                ...inputs,
+                                [a._id]: e.target.files[0]
+                              }))
+                            }
+                            className="mb-2 sm:mb-0 flex-1 min-w-0"
+                            style={{ maxWidth: "100%" }}
+                          />
+                        </div>
                         <button
                           className="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700"
                           onClick={async () => {
                             const file = fileInputs[a._id];
                             if (!file) return alert("Please upload a file.");
                             if (!token) return alert("You must be logged in to submit.");
-                            // upload file to Cloudinary
+                            // upload file to Cloudinary (use /raw/upload for PDFs)
                             const formData = new FormData();
                             formData.append("file", file);
-                            formData.append("upload_preset", "upload");
-                            const cloudName = "dctpna06w";
-                            const uploadPreset = "upload";
-                            if (!cloudName || !uploadPreset) {
-                              alert("Cloudinary credentials are not set. Please contact admin.");
-                              return;
-                            }
+                            formData.append("upload_preset", "upload"); // 'upload' is your unsigned preset name
+
+                            const cloudName = "dgedargei";
+                            const isPDF = file && file.type === "application/pdf";
+                            const uploadUrl = isPDF
+                              ? `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`
+                              : `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
                             let fileUrl = "";
                             try {
-                              const cloudRes = await axios.post(
-                                `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-                                formData
-                              );
+                              const cloudRes = await axios.post(uploadUrl, formData);
                               fileUrl = cloudRes.data.secure_url;
-                            } catch {
-                              alert("File upload failed.");
+                            } catch (err) {
+                              const msg =
+                                err.response?.data?.error?.message ||
+                                err.response?.data?.message ||
+                                "File upload failed.";
+                              alert(msg);
                               return;
                             }
                             // submit to backend
@@ -325,3 +328,4 @@ const StudentAssignmentSubmit = () => {
 };
 
 export default StudentAssignmentSubmit;
+        

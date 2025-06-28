@@ -489,7 +489,7 @@ const TeacherGradeSubmissions = ({ assignmentId: propAssignmentId, onBack }) => 
           selectedAssignmentId && submissions && submissions.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-blue-100">
+                <thead className="bg-blue-100 hidden sm:table-header-group">
                   <tr>
                     <th className="px-2 py-2 text-left text-xs font-medium text-blue-900 uppercase tracking-wider">Student</th>
                     <th className="px-2 py-2 text-left text-xs font-medium text-blue-900 uppercase tracking-wider">Submission</th>

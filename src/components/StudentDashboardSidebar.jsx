@@ -93,7 +93,7 @@ const StudentDashboardSidebar = () => {
           aria-label="Go to landing page"
         >
           <img
-            src="/assets/logo.png"
+            src="/assets/logo2.png"
             alt="EduMids Logo"
             className="drop-shadow-lg"
             style={{

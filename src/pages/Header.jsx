@@ -91,7 +91,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
   }, []);
 
   return (
-    <header className="bg-white dark:bg-slate-800 shadow-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+    <header className="bg-white dark:bg-white-800 shadow-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         <div className="flex items-center space-x-3">
           {showSidebarToggle && (
@@ -112,7 +112,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold">
                   {/* Replace <span >E</span> with logo image */}
                   <img
-                    src="/assets/logo.png"
+                    src="/assets/logo2.png"
                     alt="EduMids Logo"
                     className="w-20 h-20 object-contain"
                   />
@@ -177,7 +177,8 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
         
         <div className="flex items-center space-x-2 ">
           {/* <ThemeToggle /> */}
-          
+          {/* <ThemeToggle />
+           */}
           {/* Mobile Menu Toggle */}
           <Button 
             variant="ghost" 
@@ -289,37 +290,50 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-2">
-          <nav className="flex flex-col space-y-2 px-4">
-            <Link to="/">
-              <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Home</span>
-            </Link>
-            <Link to="/ServicesPage">
-              <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Services</span>
-            </Link>
-            <Link to="/CoursesPage">
-              <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Courses</span>
-            </Link>
-            {/* <Link to="/pricing">
-              <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Pricing</span>
-            </Link> */}
-            <Link to="/AboutPage">
-              <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">About Us</span>
-            </Link>
-            <Link to="/contact">
-              <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Contact</span>
-            </Link>
-            {!isAuthenticated && (
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-                <Link to="/auth/login">
-                  <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Log in</span>
-                </Link>
-                <Link to="/auth/register">
-                  <span className="block py-2 text-primary font-medium">Sign up</span>
-                </Link>
-              </div>
-            )}
-          </nav>
+        <div className="fixed inset-0 z-50 md:hidden bg-black bg-opacity-40 flex">
+          {/* Side Drawer */}
+          <div className="w-4/5 max-w-xs bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 py-4 px-4 h-full flex flex-col transition-transform duration-300 ease-in-out">
+            <div className="flex items-center justify-between mb-4">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                <div className="flex items-center space-x-2">
+                  <img src="/assets/logo.png" alt="EduMids Logo" className="w-10 h-10 object-contain" />
+                  <span className="text-lg font-bold text-primary">EduMinds</span>
+                </div>
+              </Link>
+              <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
+                <X className="h-6 w-6" />
+              </Button>
+            </div>
+            <nav className="flex flex-col space-y-2">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+                <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Home</span>
+              </Link>
+              <Link to="/ServicesPage" onClick={() => setMobileMenuOpen(false)}>
+                <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Services</span>
+              </Link>
+              <Link to="/CoursesPage" onClick={() => setMobileMenuOpen(false)}>
+                <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Courses</span>
+              </Link>
+              <Link to="/AboutPage" onClick={() => setMobileMenuOpen(false)}>
+                <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">About Us</span>
+              </Link>
+              <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
+                <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Contact</span>
+              </Link>
+              {!isAuthenticated && (
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+                  <Link to="/auth/login" onClick={() => setMobileMenuOpen(false)}>
+                    <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Log in</span>
+                  </Link>
+                  <Link to="/auth/register" onClick={() => setMobileMenuOpen(false)}>
+                    <span className="block py-2 text-primary font-medium">Sign up</span>
+                  </Link>
+                </div>
+              )}
+            </nav>
+          </div>
+          {/* Click outside to close */}
+          <div className="flex-1" onClick={() => setMobileMenuOpen(false)} />
         </div>
       )}
     </header>
