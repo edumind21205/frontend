@@ -105,11 +105,29 @@ const StudentProgressCard = () => {
   };
 
   // Download handler for protected lessons
-  const handleDownloadLesson = async (lessonId, displayName, resourceType) => {
+  const handleDownloadLesson = async (lessonId, displayName, resourceType, resourceUrl) => {
     setDownloadingLessonId(lessonId);
     try {
+      // If it's a PDF and the resourceUrl is a public Cloudinary URL, download directly
+      if (
+        resourceType === "PDF" &&
+        resourceUrl &&
+        resourceUrl.startsWith("https://res.cloudinary.com/") &&
+        resourceUrl.endsWith(".pdf")
+      ) {
+        // Create a temporary <a> to trigger download
+        const a = document.createElement("a");
+        a.href = resourceUrl;
+        a.download = displayName + ".pdf";
+        a.target = "_blank";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setDownloadingLessonId(null);
+        return;
+      }
+      // Otherwise, use backend route for download (for protected or video files)
       const token = localStorage.getItem("token");
-      // Always use backend route for download
       const response = await fetch(`https://eduminds-production-180d.up.railway.app/api/progress/download-lesson/${lessonId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -121,8 +139,8 @@ const StudentProgressCard = () => {
           return;
         }
         if (data.url) {
-          // For PDFs, open in new tab
           if (resourceType === "PDF") {
+            // Open in new tab (fallback for protected PDFs)
             window.open(data.url, "_blank", "noopener,noreferrer");
           } else if (resourceType === "VIDEO") {
             // For videos, fetch as blob and trigger download

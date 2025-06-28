@@ -95,7 +95,7 @@ const DownloadPage = () => {
         img.src = url;
       });
     };
-    const logoUrl = '/assets/logo.png';
+    const logoUrl = '/assets/logo2.png';
     try {
       const logoBase64 = await getBase64Logo(logoUrl);
       doc.addImage(logoBase64, 'PNG', 250, 4, 40, 18); // x, y, width, height (adjust for landscape)

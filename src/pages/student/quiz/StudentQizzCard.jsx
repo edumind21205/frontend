@@ -95,6 +95,11 @@ const QuizForm = ({ quizData, answers, handleAnswer, saveProgress, submitQuiz, s
 );
 
 const StudentQuizzCard = () => {
+  // --- Restore state from localStorage ---
+  const [selectedCourse, setSelectedCourse] = useState(() => localStorage.getItem("quizSelectedCourse") || "");
+  const [showResults, setShowResults] = useState(() => localStorage.getItem("quizShowResults") === "true");
+  const [showDashboard, setShowDashboard] = useState(() => localStorage.getItem("quizShowDashboard") === "true");
+  const [showAssignmentPage, setShowAssignmentPage] = useState(() => localStorage.getItem("quizShowAssignmentPage") === "true");
   const [quizCards, setQuizCards] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -103,12 +108,6 @@ const StudentQuizzCard = () => {
   const [answers, setAnswers] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [showResults, setShowResults] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(false);
-  const [allResults, setAllResults] = useState([]);
-  const [dashboardCards, setDashboardCards] = useState([]);
-  const [showAssignmentPage, setShowAssignmentPage] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem("token");
@@ -130,9 +129,10 @@ const StudentQuizzCard = () => {
           ).values()
         );
         setCourses(uniqueCourses);
-        // Auto-select first course if available
+        // Auto-select first course if available and not set
         if (uniqueCourses.length && !selectedCourse) {
           setSelectedCourse(uniqueCourses[0].courseId);
+          localStorage.setItem("quizSelectedCourse", uniqueCourses[0].courseId);
         }
       } catch (err) {
         setError("Failed to load quizzes.");
@@ -143,6 +143,22 @@ const StudentQuizzCard = () => {
     fetchDashboard();
     // eslint-disable-next-line
   }, [token]);
+
+  // --- Persist selectedCourse to localStorage ---
+  useEffect(() => {
+    if (selectedCourse) localStorage.setItem("quizSelectedCourse", selectedCourse);
+  }, [selectedCourse]);
+
+  // --- Persist extra views to localStorage ---
+  useEffect(() => {
+    localStorage.setItem("quizShowResults", showResults ? "true" : "false");
+  }, [showResults]);
+  useEffect(() => {
+    localStorage.setItem("quizShowDashboard", showDashboard ? "true" : "false");
+  }, [showDashboard]);
+  useEffect(() => {
+    localStorage.setItem("quizShowAssignmentPage", showAssignmentPage ? "true" : "false");
+  }, [showAssignmentPage]);
 
   const startQuiz = async (quizId) => {
     setActiveQuiz(quizId);
@@ -248,6 +264,7 @@ const StudentQuizzCard = () => {
       setAllResults(data.results || []);
       setShowResults(true);
       setShowDashboard(false);
+      // localStorage updated by useEffect
     } catch (err) {
       setError("Failed to load all quiz results.");
     } finally {
@@ -264,6 +281,7 @@ const StudentQuizzCard = () => {
       setDashboardCards(data.quizCards || []);
       setShowDashboard(true);
       setShowResults(false);
+      // localStorage updated by useEffect
     } catch (err) {
       setError("Failed to load dashboard.");
     } finally {

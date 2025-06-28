@@ -199,52 +199,84 @@ const DownloadPage = () => {
     fetchUser();
   }, []);
 
+  // Enhanced download handler for lessons (video/pdf)
   const handleDownload = async (lessonId) => {
     const token = localStorage.getItem("token");
+    // Find lesson object for filename/contentType
+    const lesson = lessons.find((l) => l._id === lessonId);
+    const displayName = lesson?.title || "download";
+    const resourceType = lesson?.contentType?.toUpperCase() || "";
+    const resourceUrl = lesson?.contentURL || lesson?.url || null;
     try {
-      const response = await fetch(`https://eduminds-production-180d.up.railway.app/api/download/lesson/${lessonId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      // If it's a PDF and the resourceUrl is a public Cloudinary URL, download directly
+      if (
+        resourceType === "PDF" &&
+        resourceUrl &&
+        resourceUrl.startsWith("https://res.cloudinary.com/") &&
+        resourceUrl.endsWith(".pdf")
+      ) {
+        const a = document.createElement("a");
+        a.href = resourceUrl;
+        a.download = displayName + ".pdf";
+        a.target = "_blank";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        return;
+      }
+      // Otherwise, use backend route for download (for protected or video files)
+      const response = await fetch(`https://eduminds-production-180d.up.railway.app/api/progress/download-lesson/${lessonId}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         if (!response.ok) {
-          alert(data.message || "Access denied or download failed.");
+          alert(data.message || "Download failed");
           return;
         }
-        // If backend returns a URL (Cloudinary/external), trigger download or open in new tab
         if (data.url) {
-          // For Cloudinary, force download if possible
-          let downloadUrl = data.url;
-          if (downloadUrl.includes("res.cloudinary.com")) {
-            downloadUrl = downloadUrl.replace(/\/upload\//, "/upload/fl_attachment/");
+          if (resourceType === "PDF") {
+            window.open(data.url, "_blank", "noopener,noreferrer");
+          } else if (resourceType === "VIDEO") {
+            const videoRes = await fetch(data.url);
+            const videoBlob = await videoRes.blob();
+            const videoUrl = window.URL.createObjectURL(videoBlob);
+            const a = document.createElement("a");
+            a.href = videoUrl;
+            a.download = displayName + ".mp4";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(videoUrl);
+          } else {
+            const link = document.createElement("a");
+            link.href = data.url;
+            link.setAttribute("download", "");
+            link.rel = "noopener noreferrer";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
           }
-          const link = document.createElement("a");
-          link.href = downloadUrl;
-          link.setAttribute("download", "");
-          link.rel = "noopener noreferrer";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          // Fetch updated history after download
-          fetchHistory();
           return;
         }
-        alert("Access denied or download failed.");
+        alert("Download failed");
         return;
       }
       if (!response.ok) {
-        alert("Access denied or download failed.");
+        alert("Download failed");
         return;
       }
-      // Local file: download as blob
+      // Download as blob (fallback)
       const blob = await response.blob();
+      let filename = displayName;
       const disposition = response.headers.get("Content-Disposition");
-      let filename = "download";
       if (disposition && disposition.indexOf("filename=") !== -1) {
         filename = disposition.split("filename=")[1].replace(/['"]/g, "");
+      } else if (resourceType === "PDF") {
+        filename += ".pdf";
+      } else if (resourceType === "VIDEO") {
+        filename += ".mp4";
       }
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -254,10 +286,8 @@ const DownloadPage = () => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-      // Fetch updated history after download
-      fetchHistory();
     } catch (err) {
-      alert("Access denied or download failed.");
+      alert("Download failed");
     }
   };
 
@@ -580,61 +610,50 @@ const DownloadPage = () => {
               </tr>
             </thead>
             <tbody>
-              {/* Only show first 2 if not expanded, else show all */}
-              {(showAllLessons
-                ? lessons.filter((l) => ["video", "pdf"].includes(l.contentType))
-                : lessons.filter((l) => ["video", "pdf"].includes(l.contentType)).slice(0, 2)
-              ).map((lesson) => (
-                <tr
-                  key={lesson._id}
-                  className="hover:bg-blue-50 transition"
-                >
-                  <td className="p-3 font-medium text-gray-900">
-                    {lesson.title}
-                  </td>
-                  <td className="p-3 capitalize text-gray-700">
-                    {lesson.contentType}
-                  </td>
-                  <td className="p-3 text-gray-700">
-                    {lesson.courseTitle || "-"}
-                  </td>
-                  <td className="p-3">
-                    <button
-                      className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:from-blue-700 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
-                      onClick={() => handleDownload(lesson._id)}
-                    >
-                      <span className="inline-block align-middle mr-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-5 w-5 inline"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
-                          />
-                        </svg>
-                      </span>
-                      Download
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {lessons.filter((l) => ["video", "pdf"].includes(l.contentType))
-                .length === 0 && (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="p-3 text-center text-gray-500"
-                  >
-                    No downloadable lessons found.
-                  </td>
-                </tr>
-              )}
+              {(() => {
+                const filteredLessons = lessons.filter((l) => ["video", "pdf"].includes(l.contentType));
+                const visibleLessons = showAllLessons ? filteredLessons : filteredLessons.slice(0, 2);
+                if (filteredLessons.length === 0) {
+                  return (
+                    <tr>
+                      <td colSpan={4} className="p-3 text-center text-gray-500">
+                        No downloadable lessons found.
+                      </td>
+                    </tr>
+                  );
+                }
+                return visibleLessons.map((lesson) => (
+                  <tr key={lesson._id} className="hover:bg-blue-50 transition">
+                    <td className="p-3 font-medium text-gray-900">{lesson.title}</td>
+                    <td className="p-3 capitalize text-gray-700">{lesson.contentType}</td>
+                    <td className="p-3 text-gray-700">{lesson.courseTitle || "-"}</td>
+                    <td className="p-3">
+                      <button
+                        className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:from-blue-700 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+                        onClick={() => handleDownload(lesson._id)}
+                      >
+                        <span className="inline-block align-middle mr-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 inline"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
+                            />
+                          </svg>
+                        </span>
+                        Download
+                      </button>
+                    </td>
+                  </tr>
+                ));
+              })()}
             </tbody>
           </table>
           {/* Expand/Collapse Button for lessons */}
@@ -935,7 +954,6 @@ const DownloadPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {/* Show only first 2 certificates unless expanded */}
                 {(showAllDownloadableCerts ? certificates : certificates.slice(0, 2)).map(cert => (
                   <tr key={cert.certificateId} className="hover:bg-blue-50 transition">
                     <td className="p-3 font-medium text-gray-900">{cert.courseName}</td>

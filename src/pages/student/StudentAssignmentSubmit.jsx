@@ -5,12 +5,15 @@ import { toast } from "react-toastify"; // Add this import
 
 const StudentAssignmentSubmit = () => {
   const { assignmentId } = useParams();
+  // --- Restore selectedAssignmentId from localStorage ---
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState(() => {
+    return localStorage.getItem("assignmentSelectedId") || null;
+  });
   const [assignment, setAssignment] = useState(null);
   const [file, setFile] = useState(null);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [message, setMessage] = useState("");
   const [allAssignments, setAllAssignments] = useState([]);
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fileInputs, setFileInputs] = useState({}); // Track file per assignment in list
 
@@ -82,6 +85,15 @@ const StudentAssignmentSubmit = () => {
     checkSubmission();
     // eslint-disable-next-line
   }, [assignmentId, selectedAssignmentId, token]);
+
+  // --- Persist selectedAssignmentId to localStorage ---
+  useEffect(() => {
+    if (selectedAssignmentId) {
+      localStorage.setItem("assignmentSelectedId", selectedAssignmentId);
+    } else {
+      localStorage.removeItem("assignmentSelectedId");
+    }
+  }, [selectedAssignmentId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -247,6 +259,13 @@ const StudentAssignmentSubmit = () => {
                         >
                           Submit
                         </button>
+                        {/* Add button to view this assignment in single view */}
+                        <button
+                          className="mt-1 text-blue-600 underline text-xs"
+                          onClick={() => setSelectedAssignmentId(a._id)}
+                        >
+                          View Details
+                        </button>
                       </>
                     )}
                     {a.marksObtained !== null && (
@@ -318,6 +337,7 @@ const StudentAssignmentSubmit = () => {
             setAssignment(null);
             setAlreadySubmitted(false);
             setMessage("");
+            // localStorage will be cleared by useEffect
           }}
         >
           Back to All Assignments
@@ -328,4 +348,4 @@ const StudentAssignmentSubmit = () => {
 };
 
 export default StudentAssignmentSubmit;
-        
+

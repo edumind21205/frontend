@@ -131,11 +131,10 @@ export default function AdminReportCard() {
     csvRows.push(""); // empty line
     // Header
     csvRows.push([
-      'Course Title', 'Category', 'Price', 'Teacher Name', 'Teacher Email', 'Total Enrolled', 'Total Completed', 'Total Certified', 'Assignments'
+      'Course Title', 'Category', 'Price', 'Teacher Name', 'Teacher Email', 'Total Enrolled', 'Total Completed', 'Total Certified'
     ].join(','));
     exportReport.forEach(course => {
       const courseId = course.courseId || course._id;
-      const assignmentsCount = courseDetails[courseId]?.assignments?.length ?? 0;
       csvRows.push([
         '"' + (course.title || '') + '"',
         '"' + (course.category || '') + '"',
@@ -144,8 +143,7 @@ export default function AdminReportCard() {
         '"' + (course.teacher?.email || '') + '"',
         course.totalEnrolled ?? 0,
         course.totalCompleted ?? 0,
-        course.totalCertified ?? 0,
-        assignmentsCount
+        course.totalCertified ?? 0
       ].join(','));
     });
     const csvContent = csvRows.join('\n');
@@ -190,7 +188,7 @@ export default function AdminReportCard() {
       });
     };
     // Load logo and add to PDF
-    const logoUrl = '/assets/logo.png';
+    const logoUrl = '/assets/logo2.png';
     try {
       const logoBase64 = await getBase64Logo(logoUrl);
       doc.addImage(logoBase64, 'PNG', 150, 4, 40, 18); // x, y, width, height
@@ -206,11 +204,9 @@ export default function AdminReportCard() {
     doc.setFontSize(12);
     doc.text('Admin Courses & Users Report', 14, 32);
     const tableColumn = [
-      'Course Title', 'Category', 'Price', 'Teacher Name', 'Teacher Email', 'Total Enrolled', 'Total Completed', 'Total Certified', 'Assignments'
+      'Course Title', 'Category', 'Price', 'Teacher Name', 'Teacher Email', 'Total Enrolled', 'Total Completed', 'Total Certified'
     ];
     const tableRows = exportReport.map(course => {
-      const courseId = course.courseId || course._id;
-      const assignmentsCount = courseDetails[courseId]?.assignments?.length ?? 0;
       return [
         course.title || '',
         course.category || '',
@@ -219,8 +215,7 @@ export default function AdminReportCard() {
         course.teacher?.email || '',
         course.totalEnrolled ?? 0,
         course.totalCompleted ?? 0,
-        course.totalCertified ?? 0,
-        assignmentsCount
+        course.totalCertified ?? 0
       ];
     });
     autoTable(doc, {

@@ -114,10 +114,10 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
                   <img
                     src="/assets/logo2.png"
                     alt="EduMids Logo"
-                    className="w-20 h-20 object-contain"
+                    className="w-10 h-10 max-w-full max-h-full object-contain"
                   />
                 </div>
-                <span className="text-xl font-bold text-primary">EduMinds</span>
+                <span className="text-xl font-bold text-primary hidden md:inline">EduMinds</span>
               </div>
             </Link>
           )}
@@ -289,15 +289,15 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
+      {mobileMenuOpen && !isAuthenticated && (
         <div className="fixed inset-0 z-50 md:hidden bg-black bg-opacity-40 flex">
           {/* Side Drawer */}
-          <div className="w-4/5 max-w-xs bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 py-4 px-4 h-full flex flex-col transition-transform duration-300 ease-in-out">
+          <div className="w-4/5 max-w-xs bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 py-4 px-4 h-full flex flex-col transition-transform duration-300 ease-in-out overflow-hidden">
             <div className="flex items-center justify-between mb-4">
               <Link to="/" onClick={() => setMobileMenuOpen(false)}>
                 <div className="flex items-center space-x-2">
-                  <img src="/assets/logo.png" alt="EduMids Logo" className="w-10 h-10 object-contain" />
-                  <span className="text-lg font-bold text-primary">EduMinds</span>
+                  <img src="/assets/logo.png" alt="EduMids Logo" className="w-10 h-10 max-w-full max-h-full object-contain" />
+                  <span className="text-lg font-bold text-primary hidden md:inline">EduMinds</span>
                 </div>
               </Link>
               <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">

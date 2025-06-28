@@ -17,7 +17,9 @@ const TeacherGradeSubmissions = ({ assignmentId: propAssignmentId, onBack }) => 
   });
   const [message, setMessage] = useState("");
   const [myAssignments, setMyAssignments] = useState([]);
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState(propAssignmentId || "");
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState(() => {
+    return localStorage.getItem("teacherSelectedAssignmentId") || (propAssignmentId || "");
+  });
   const [editAssignmentId, setEditAssignmentId] = useState(null);
   const [editAssignment, setEditAssignment] = useState({
     title: "",
@@ -262,6 +264,15 @@ const TeacherGradeSubmissions = ({ assignmentId: propAssignmentId, onBack }) => 
       toast.error("Failed to delete assignment");
     }
   };
+
+  // Persist selectedAssignmentId to localStorage
+  useEffect(() => {
+    if (selectedAssignmentId) {
+      localStorage.setItem("teacherSelectedAssignmentId", selectedAssignmentId);
+    } else {
+      localStorage.removeItem("teacherSelectedAssignmentId");
+    }
+  }, [selectedAssignmentId]);
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
