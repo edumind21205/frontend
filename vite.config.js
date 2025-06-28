@@ -4,12 +4,6 @@ import fs from 'fs'
 import path from 'path'
 
 export default defineConfig({
+  // base: './', // <-- use this!
   plugins: [react()],
-  // server: {
-  //   https: {
-  //     key: fs.readFileSync(path.resolve(__dirname, '../certs/key.pem')),
-  //     cert: fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem')),
-  //   },
-  //   port: 5173, // optional, set your port
-  // }
 })

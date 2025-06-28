@@ -40,7 +40,7 @@ export default function Category() {
   return (
     <div>
      <section
-        className="py-16 bg-white-50 "
+        className="py-16 bg-slate-50 "
       >
         <div className="container mx-auto px-4">
           <motion.h2

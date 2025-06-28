@@ -38,7 +38,7 @@ function Cta() {
               className="bg-white text-primary hover:bg-gray-100 py-6 shadow-lg font-medium text-lg transition transform hover:-translate-y-1 hover:shadow-xl"
               asChild
             >
-              <Link to="/auth/SignUp">
+              <Link to="/auth/Login">
                 Get Started
               </Link>
             </Button>

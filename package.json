@@ -54,6 +54,7 @@
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
     "redux": "^5.0.1",
+    "serve": "^14.2.4",
     "tailwind-merge": "^3.3.0",
     "wouter": "^3.7.1",
     "zod": "^3.25.49",

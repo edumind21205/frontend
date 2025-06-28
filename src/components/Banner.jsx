@@ -7,7 +7,7 @@ export default function Banner() {
 
   return (
     <div>
-        <section className="py-16 bg-white dark:bg-slate-900">
+        <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-4" ref={ref}>
           <motion.h2
             className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-4 font-accent fade-in"

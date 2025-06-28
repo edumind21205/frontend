@@ -107,11 +107,11 @@ const StudentCourseCard = () => {
         />
       </div>
       {/* User Info */}
-      <div className="mb-6 p-4 bg-white rounded-xl shadow-lg flex items-center gap-4">
+      <div className="mb-6 p-4 bg-white rounded-xl shadow-lg flex flex-col sm:flex-row items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center text-2xl font-bold">
           {data.user.id.slice(0, 2).toUpperCase()}
         </div>
-        <div>
+        <div className="text-center sm:text-left">
           <div className="font-semibold">User ID: {data.user.id}</div>
           <div className="text-sm text-gray-500">Role: {data.user.role}</div>
         </div>

@@ -363,7 +363,7 @@ const StudentQuizzCard = () => {
                 Show Unified Dashboard
               </button>
               <button
-                className="px-3 py-1 bg-gray-400 text-white rounded-lg"
+                className="px-3 py-1 bg-gray-400 text-white rounded-lg hidden sm:inline-block"
                 onClick={() => { setShowResults(false); setShowDashboard(false); }}
               >
                 Hide Extra Views

@@ -81,7 +81,7 @@ export default function AboutPage() {
 
         {/* Our Mission Section */}
         <motion.div
-          className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-8 md:p-12 mb-24"
+          className="bg-slate-50 rounded-2xl p-8 md:p-12 mb-24"
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}

@@ -320,7 +320,30 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
               <Link to="/contact" onClick={() => setMobileMenuOpen(false)}>
                 <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Contact</span>
               </Link>
-              {!isAuthenticated && (
+              {isAuthenticated ? (
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex flex-col gap-2">
+                  <Button
+                    className="bg-blue-500 text-white hover:bg-blue-600 w-full"
+                    size="sm"
+                    onClick={() => {
+                      handleDashboardRedirect();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    Dashboard
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="w-full text-left"
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    Log out
+                  </Button>
+                </div>
+              ) : (
                 <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
                   <Link to="/auth/login" onClick={() => setMobileMenuOpen(false)}>
                     <span className="block py-2 text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary font-medium">Log in</span>

@@ -32,7 +32,7 @@ export default function Team() {
         {teamMembers.map((member, index) => (
           <motion.div
             key={index}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105"
+            className="bg-slate-50 rounded-xl shadow-md overflow-hidden transition-transform hover:scale-105"
             initial={{ opacity: 0, y: 40 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ delay: inView ? index * 0.15 : 0, duration: 0.7, ease: "easeOut" }}

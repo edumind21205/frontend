@@ -204,16 +204,16 @@ const DownloadPage = () => {
               (All Downloads)
             </span>
           </h2>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
-              className="px-3 py-1 rounded border bg-green-600 text-white font-semibold hover:bg-green-700 transition text-sm"
+              className="px-3 py-1 rounded border bg-green-600 text-white font-semibold hover:bg-green-700 transition text-sm w-full sm:w-auto"
               onClick={handleDownloadCSV}
               disabled={loading || !history.length}
             >
               Download CSV
             </button>
             <button
-              className="px-3 py-1 rounded border bg-red-600 text-white font-semibold hover:bg-red-700 transition text-sm"
+              className="px-3 py-1 rounded border bg-red-600 text-white font-semibold hover:bg-red-700 transition text-sm w-full sm:w-auto"
               onClick={handleDownloadPDF}
               disabled={loading || !history.length}
             >

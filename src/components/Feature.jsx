@@ -36,7 +36,7 @@ export default function Feature() {
 
   return (
     <section
-      className="py-16 bg-white dark:bg-slate-900"
+      className="py-16 bg-slate-50"
     >
       <div className="container mx-auto px-4">
         <div
