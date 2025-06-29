@@ -36,13 +36,13 @@ export default function Feature() {
 
   return (
     <section
-      className="py-16 bg-slate-50"
+      className="py-16 bg-slate-50 "
     >
       <div className="container mx-auto px-4">
         <div
           className="flex justify-between items-center mb-10 fade-in"
         >
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white font-accent">
+          <h2 className="text-3xl font-bold text-gray-900  font-accent">
             Featured Courses
           </h2>
           <Link to="/CoursesPage" className="hidden md:block">

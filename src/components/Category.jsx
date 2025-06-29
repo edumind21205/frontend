@@ -44,7 +44,7 @@ export default function Category() {
       >
         <div className="container mx-auto px-4">
           <motion.h2
-            className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-6 font-accent fade-in"
+            className="text-3xl font-bold text-gray-900  text-center mb-6 font-accent fade-in"
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
