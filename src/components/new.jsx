@@ -92,7 +92,7 @@ const New = () => {
     <div className="h-screen w-[250px] bg-blue-900 flex flex-col">
       <div className="p-4 flex items-center gap-2">
         <div className="w-8 h-8 bg-white text-blue-900 font-bold flex items-center justify-center rounded">ED</div>
-        <h2 className="text-white font-bold text-xl">EduMids</h2>
+        <h2 className="text-white font-bold text-xl">EduMinds</h2>
       </div>
 
       <div className="mt-6 px-2 flex-1 flex flex-col gap-1">

@@ -94,7 +94,7 @@ const StudentDashboardSidebar = () => {
         >
           <img
             src="/assets/logo2.png"
-            alt="EduMids Logo"
+            alt="EduMinds Logo"
             className="drop-shadow-lg"
             style={{
               objectFit: "contain",

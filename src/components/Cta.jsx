@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { motion, useInView } from "framer-motion";
@@ -6,6 +6,39 @@ import { motion, useInView } from "framer-motion";
 function Cta() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  // Track token reactively (update on login/logout without refresh)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
+
+  useEffect(() => {
+    // Listen for login/logout in other tabs
+    const onStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
+    window.addEventListener("storage", onStorage);
+
+    // Listen for login/logout in this tab
+    const origSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+      origSetItem.apply(this, arguments);
+      if (key === "token") {
+        setIsLoggedIn(!!value);
+      }
+    };
+
+    // Listen for removal of token (logout)
+    const origRemoveItem = localStorage.removeItem;
+    localStorage.removeItem = function(key) {
+      origRemoveItem.apply(this, arguments);
+      if (key === "token") {
+        setIsLoggedIn(false);
+      }
+    };
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      localStorage.setItem = origSetItem;
+      localStorage.removeItem = origRemoveItem;
+    };
+  }, []);
 
   return (
     <div>
@@ -33,15 +66,17 @@ function Cta() {
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
           >
-            <Button
-              size="lg"
-              className="bg-white text-primary hover:bg-gray-100 py-6 shadow-lg font-medium text-lg transition transform hover:-translate-y-1 hover:shadow-xl"
-              asChild
-            >
-              <Link to="/auth/Login">
-                Get Started
-              </Link>
-            </Button>
+            {!isLoggedIn && (
+              <Button
+                size="lg"
+                className="bg-white text-primary hover:bg-gray-100 py-6 shadow-lg font-medium text-lg transition transform hover:-translate-y-1 hover:shadow-xl"
+                asChild
+              >
+                <Link to="/auth/Login">
+                  Get Started
+                </Link>
+              </Button>
+            )}
             <Button
               size="lg"
               variant="outline"

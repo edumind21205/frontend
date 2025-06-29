@@ -92,7 +92,7 @@ const TeacherDashboardSidebar = () => {
         >
           <img
             src="/assets/logo2.png"
-            alt="EduMids Logo"
+            alt="EduMinds Logo"
             width={collapsed ? 36 : 48}
             height={collapsed ? 36 : 48}
             className="drop-shadow-lg"

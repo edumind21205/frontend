@@ -113,7 +113,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
                   {/* Replace <span >E</span> with logo image */}
                   <img
                     src="/assets/logo2.png"
-                    alt="EduMids Logo"
+                    alt="EduMinds Logo"
                     className="w-10 h-10 max-w-full max-h-full object-contain"
                   />
                 </div>
@@ -296,7 +296,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
             <div className="flex items-center justify-between mb-4">
               <Link to="/" onClick={() => setMobileMenuOpen(false)}>
                 <div className="flex items-center space-x-2">
-                  <img src="/assets/logo.png" alt="EduMids Logo" className="w-10 h-10 max-w-full max-h-full object-contain" />
+                  <img src="/assets/logo.png" alt="EduMinds Logo" className="w-10 h-10 max-w-full max-h-full object-contain" />
                   <span className="text-lg font-bold text-primary hidden md:inline">EduMinds</span>
                 </div>
               </Link>

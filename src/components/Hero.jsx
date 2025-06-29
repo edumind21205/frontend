@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { motion, useInView } from "framer-motion"; // Add useInView
@@ -7,6 +7,39 @@ import { motion, useInView } from "framer-motion"; // Add useInView
 const Hero = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" }); // Animate once when in view
+
+  // Track token reactively (update on login/logout without refresh)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("token"));
+
+  useEffect(() => {
+    // Listen for login/logout in other tabs
+    const onStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
+    window.addEventListener("storage", onStorage);
+
+    // Listen for login/logout in this tab
+    const origSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+      origSetItem.apply(this, arguments);
+      if (key === "token") {
+        setIsLoggedIn(!!value);
+      }
+    };
+
+    // Listen for removal of token (logout)
+    const origRemoveItem = localStorage.removeItem;
+    localStorage.removeItem = function(key) {
+      origRemoveItem.apply(this, arguments);
+      if (key === "token") {
+        setIsLoggedIn(false);
+      }
+    };
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      localStorage.setItem = origSetItem;
+      localStorage.removeItem = origRemoveItem;
+    };
+  }, []);
 
   return (
     <div className="pb-16 bg-blue-500">
@@ -39,7 +72,10 @@ const Hero = () => {
               Discover courses taught by industry experts and expand your skills with hands-on learning experiences.
             </motion.p>
             <motion.div
-              className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+              className={
+                `flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4` +
+                (!isLoggedIn ? "" : " justify-start")
+              }
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ delay: 0.6, duration: 0.7 }}
@@ -53,16 +89,18 @@ const Hero = () => {
                   Explore Courses
                 </Link>
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-2 border-white text-white hover:bg-blue/10 py-6 font-medium transition"
-                asChild
-              >
-                <Link to="/auth/Login">
-                  Sign Up Free
-                </Link>
-              </Button>
+              {!isLoggedIn && (
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-2 border-white text-white hover:bg-blue/10 py-6 font-medium transition"
+                  asChild
+                >
+                  <Link to="/auth/Login">
+                    Sign Up Free
+                  </Link>
+                </Button>
+              )}
             </motion.div>
           </motion.div>
           <motion.div

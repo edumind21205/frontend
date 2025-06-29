@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { ChevronRight } from "lucide-react";
 import BuyButton from "../components/BuyButton";
 import { motion } from "framer-motion"; // Add this import
- 
+import { toast } from "react-toastify";
+
 export default function Feature() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -90,10 +92,65 @@ export default function Feature() {
                         Best sell
                       </span>
                     </div>
-                    <div className="mt-auto flex justify-end">
-                      <Link to={`/courses/${course._id}`}>
-                        <BuyButton course={course} />
-                      </Link>
+                    <div className="mt-auto flex justify-end ml-30">
+                      {(() => {
+                        const token = localStorage.getItem("token");
+                        if (!token) {
+                          // Not logged in: show plain Enroll Now button
+                          return (
+                            <button
+                              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+                              onClick={() => navigate("/auth/login")}
+                            >
+                              Enroll Now
+                            </button>
+                          );
+                        }
+                        // Logged in: show BuyButton with enrollment logic
+                        return (
+                          <button
+                            onClick={async () => {
+                              const token = localStorage.getItem("token");
+                              if (!token) {
+                                navigate("/auth/login");
+                                return;
+                              }
+                              try {
+                                // Check user role first
+                                const res = await fetch("https://eduminds-production-180d.up.railway.app/api/auth/me", {
+                                  headers: { Authorization: `Bearer ${token}` },
+                                });
+                                if (!res.ok) throw new Error("Failed to fetch user info");
+                                const user = await res.json();
+                                if (user.role && user.role.toLowerCase() === "student") {
+                                  // Only check enrollment if user is student
+                                  const enrollRes = await fetch(`https://eduminds-production-180d.up.railway.app/api/enrollments/check/${course._id}`, {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                  });
+                                  if (!enrollRes.ok) throw new Error("Failed to check enrollment");
+                                  const enrollData = await enrollRes.json();
+                                  const alreadyEnrolled = enrollData.enrolled !== undefined ? enrollData.enrolled : enrollData.isEnrolled;
+                                  if (alreadyEnrolled) {
+                                    toast.info("Already enrolled in this course");
+                                    // Do NOT navigate to checkout page
+                                    return;
+                                  }
+                                  navigate(`/checkout/${course._id}`);
+                                } else {
+                                  toast.info("Please login as a student to enroll.");
+                                }
+                              } catch {
+                                toast.err("Unable to verify user role. Please login again.");
+                                navigate("/auth/login");
+                              }
+                            }}
+                            className="w-full"
+                            style={{ background: "none", border: "none", padding: 0 }}
+                          >
+                            <BuyButton course={course} />
+                          </button>
+                        );
+                      })()}
                     </div>
                   </div>
                 </motion.div>

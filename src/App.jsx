@@ -1,5 +1,6 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Routes, Route } from "react-router-dom";
 import AuthLayout from "./layout/AuthLayout";
 import { HashRouter } from 'react-router-dom';
@@ -423,7 +424,7 @@ function App() {
             <Route path="/lessons/:id" element={<LessonDetail />} />
             <Route path="/quizzes/:id" element={<QuizDetail />} />
           </Routes>
-          <ToastContainer />
+          <ToastContainer position="top-center" autoClose={2000} />
         </AuthLayout>
   );
 }
