@@ -48,7 +48,7 @@ export default function Cookie() {
         <section>
           <h2 className="text-2xl font-semibold mb-2">6. Contact Us</h2>
           <p>
-            If you have questions about our Cookie Policy, please contact us at <a href="mailto:support@eduminds.com" className="text-blue-600 underline">support@eduminds.com</a>.
+            If you have questions about our Cookie Policy, please contact us at <a href="mailto:support@edumideduinfo@gmail.com" className="text-blue-600 underline">support@edumideduinfo@gmail.com</a>.
           </p>
         </section>
       </div>

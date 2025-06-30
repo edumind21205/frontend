@@ -227,6 +227,10 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
                 </div>
                 {(isTeacher || user?.role === "admin") && (
                   <div className="mt-4">
+                    {/* 
+                      Admin and Teacher can answer questions.
+                      If admin cannot answer, check backend permissions for /api/qna/answer/:id.
+                    */}
                     <textarea
                       className="w-full border border-blue-200 p-2 text-sm rounded-lg focus:ring-2 focus:ring-blue-400"
                       placeholder="Write your answer..."

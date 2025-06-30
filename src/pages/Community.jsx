@@ -65,7 +65,7 @@ export default function Community() {
       <div className="mt-12 text-center">
         <p className="text-lg text-gray-600 mb-4">
           Have ideas or want to get more involved? Email us at{' '}
-          <a href="mailto:community@eduminds.com" className="text-blue-600 underline">community@eduminds.com</a>
+          <a href="mailto:community@eduminds.com" className="text-blue-600 underline">community@edumideduinfo@gmail.com</a>
         </p>
         <span className="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
           More interactive features coming soon!

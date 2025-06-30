@@ -6,7 +6,7 @@ const resources = [
   {
     title: "Getting Started Guide",
     description: "Learn how to create an account, enroll in courses, and start your learning journey on EduMinds.",
-    link: "/public/assets/2.jpg",
+    link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
     type: "PDF",
   },
   {
@@ -18,13 +18,13 @@ const resources = [
   {
     title: "FAQ",
     description: "Find answers to the most common questions about EduMinds.",
-    link: "/faq",
+    link: "/#/FAQ",
     type: "Page",
   },
   {
     title: "Contact Support",
     description: "Need help? Reach out to our support team for assistance.",
-    link: "/contact",
+    link: "/#/Contact",
     type: "Page",
   },
   {

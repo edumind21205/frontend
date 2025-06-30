@@ -18,7 +18,7 @@ export default function Refund() {
         <section>
           <h2 className="text-2xl font-semibold mb-2">2. How to Request a Refund</h2>
           <p>
-            To request a refund, please contact our support team at <a href="mailto:support@eduminds.com" className="text-blue-600 underline">support@eduminds.com</a> with your course details and reason for the request.
+            To request a refund, please contact our support team at <a href="mailto:support@edumideduinfo@gmail.com" className="text-blue-600 underline">support@edumideduinfo@gmail.com</a> with your course details and reason for the request.
           </p>
         </section>
         <section>

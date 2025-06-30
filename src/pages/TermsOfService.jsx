@@ -54,7 +54,7 @@ export default function TermsOfService() {
         <section>
           <h2 className="text-2xl font-semibold mb-2">8. Contact Us</h2>
           <p>
-            For questions about these Terms, please contact us at <a href="mailto:support@eduminds.com" className="text-blue-600 underline">support@eduminds.com</a>.
+            For questions about these Terms, please contact us at <a href="mailto:edumideduinfo@gmail.com" className="text-blue-600 underline"> edumideduinfo@gmail.com</a>.
           </p>
         </section>
       </div>

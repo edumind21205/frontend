@@ -6,13 +6,13 @@ export default function Team() {
     {
       name: 'SALMAN AHMED',
       position: 'Junior Software Engineer',
-      bio: 'With over 1 years of Development, Salman create the Backend for Eduminds ',
+      bio: 'With good experience of Development, Salman create the Backend & frontend for Eduminds ',
       imageUrl: '/assets/rollno5.jpg'
     },
     {
       name: 'M Rehman Mujahid',
       position: 'frontend Developer',
-      bio: 'Previously create many websites using react.',
+      bio: 'Previously create many websites using react.Mange the database and documentation for Eduminds',
       imageUrl: '/assets/rollno44.jpg'
     }
   ];
