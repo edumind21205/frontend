@@ -225,7 +225,7 @@ const DownloadPage = () => {
         return;
       }
       // Otherwise, use backend route for download (for protected or video files)
-      const response = await fetch(`https://eduminds-production-180d.up.railway.app/api/progress/download-lesson/${lessonId}`, {
+      const response = await fetch(`https://eduminds-production-180d.up.railway.app/api/download/lesson/${lessonId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const contentType = response.headers.get("content-type");
@@ -286,6 +286,26 @@ const DownloadPage = () => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+
+      // Optimistically update history table immediately
+      setHistory(prev => [
+        {
+          _id: Date.now().toString(), // temp id
+          user: user ? { name: user.name, email: user.email } : null,
+          fileName: filename,
+          filePath: resourceUrl || lesson?.url || "",
+          courseTitle: lesson?.courseTitle || "-",
+          downloadedAt: new Date().toISOString(),
+          ip: "-", // will be updated on backend
+          userAgent: navigator.userAgent,
+        },
+        ...prev
+      ]);
+      // Also fetch from backend to sync with real data
+      fetchHistory();
+
+      // Refresh history after download (let backend handle recording)
+      fetchHistory();
     } catch (err) {
       alert("Download failed");
     }
