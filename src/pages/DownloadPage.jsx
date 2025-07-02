@@ -222,6 +222,23 @@ const DownloadPage = () => {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+
+        // Optimistically update history table immediately
+        setHistory(prev => [
+          {
+            _id: Date.now().toString(), // temp id
+            user: user ? { name: user.name, email: user.email } : null,
+            fileName: displayName + ".pdf",
+            filePath: resourceUrl || lesson?.url || "",
+            courseTitle: lesson?.courseTitle || "-",
+            downloadedAt: new Date().toISOString(),
+            ip: "-", // will be updated on backend
+            userAgent: navigator.userAgent,
+          },
+          ...prev
+        ]);
+        // Optionally, you can still fetch from backend to sync with real data in the background
+        fetchHistory();
         return;
       }
       // Otherwise, use backend route for download (for protected or video files)
@@ -258,6 +275,21 @@ const DownloadPage = () => {
             link.click();
             document.body.removeChild(link);
           }
+          // Optimistically update history table immediately
+          setHistory(prev => [
+            {
+              _id: Date.now().toString(),
+              user: user ? { name: user.name, email: user.email } : null,
+              fileName: resourceType === "PDF" ? displayName + ".pdf" : resourceType === "VIDEO" ? displayName + ".mp4" : displayName,
+              filePath: resourceUrl || lesson?.url || "",
+              courseTitle: lesson?.courseTitle || "-",
+              downloadedAt: new Date().toISOString(),
+              ip: "-",
+              userAgent: navigator.userAgent,
+            },
+            ...prev
+          ]);
+          fetchHistory();
           return;
         }
         alert("Download failed");
@@ -301,7 +333,7 @@ const DownloadPage = () => {
         },
         ...prev
       ]);
-      // Also fetch from backend to sync with real data
+      // Optionally, you can still fetch from backend to sync with real data in the background
       fetchHistory();
 
       // Refresh history after download (let backend handle recording)
