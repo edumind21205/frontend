@@ -290,7 +290,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
 
       {/* Mobile Menu */}
       {mobileMenuOpen && !isAuthenticated && (
-        <div className="fixed inset-0 z-50 md:hidden bg-black bg-opacity-40 flex">
+        <div className="fixed inset-0 z-50 md:hidden flex">
           {/* Side Drawer */}
           <div className="w-4/5 max-w-xs bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 py-4 px-4 h-full flex flex-col transition-transform duration-300 ease-in-out overflow-hidden">
             <div className="flex items-center justify-between mb-4">

@@ -29,7 +29,7 @@ const mobileSidebarItems = [
 
 const TeacherDashboardMobileMenu = ({ open, onClose, onLogout, pathname }) => (
   open ? (
-    <div className="fixed inset-0 z-50 md:hidden bg-black bg-opacity-40 flex">
+    <div className="fixed inset-0 z-50 md:hidden flex">
       <div className="w-4/5 max-w-xs bg-white py-4 px-4 h-full flex flex-col transition-transform duration-300 ease-in-out overflow-hidden">
         <div className="flex items-center justify-between mb-4">
           <Link to="/" onClick={onClose}>

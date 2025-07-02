@@ -92,7 +92,7 @@ export default function Feature() {
                           {course.category || "fantasy"}
                         </span>
                         <span className="text-green-700 font-semibold text-lg">
-                          Best sell
+                          {course.price ? `PKR${course.price}` : 'Free'}
                         </span>
                       </div>
                       <div className="mt-auto flex justify-end ml-30">

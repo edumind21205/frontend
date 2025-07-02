@@ -57,11 +57,12 @@ export default function EnrollButton({ course }) {
 
   return (
     <button
-      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
+      className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full hover:-translate-y-1"
       onClick={handleEnroll}
       disabled={enrolling}
     >
-       Buy Now PKR {course.price}
+       Buy now 
+        {/* {course.price} */}
     </button>
   );
 }

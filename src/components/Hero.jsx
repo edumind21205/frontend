@@ -93,7 +93,7 @@ const Hero = () => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white text-white hover:bg-blue/10 py-6 font-medium transition dark:bg-slat-900 dark:text-white dark:hover:bg-slat-800"
+                  className="border-2 border-white text-white hover:bg-blue/10 py-6 font-medium transition dark:bg-slat-900 dark:text-white dark:hover:bg-slat-800 hover:-translate-y-1"
                   asChild
                 >
                   <Link to="/auth/Login">

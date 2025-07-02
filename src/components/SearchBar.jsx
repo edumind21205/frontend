@@ -258,7 +258,7 @@ const SearchBar = () => {
                   {userInitial || "✨"}
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-gradient-to-br from-blue-50 to-white">
+              <DropdownMenuContent align="end" className="w-56 bg-gradient-to-br from-blue-50 to-white !bg-transparent !shadow-lg !backdrop-blur-none">
                 <div className="px-2 py-1.5">
                   <p className="text-sm font-medium">{userName}</p>
                   {/* Show email if available */}
@@ -272,14 +272,17 @@ const SearchBar = () => {
                     return null;
                   })()}
                 </div>
-                {/* <DropdownMenuSeparator />
-                <Link to="/setting">
-                  <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
-                </Link> */}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer" onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); navigate("/"); }}>
-                  Log out
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={handleBellClick}
+                >
+                  notifications
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {/* <DropdownMenuItem className="cursor-pointer" onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); navigate("/"); }}>
+                  Log out
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
