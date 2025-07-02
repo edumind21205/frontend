@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import TeacherGradeSubmissions from "./TeacherGradeSubmissions";
 
@@ -261,6 +262,7 @@ export default function QuizCard() {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 }

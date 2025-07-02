@@ -108,6 +108,8 @@ const StudentQuizzCard = () => {
   const [answers, setAnswers] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [courses, setCourses] = useState([]);
+  const [allResults, setAllResults] = useState([]);
+  const [dashboardCards, setDashboardCards] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem("token");

@@ -53,7 +53,7 @@ function Cta() {
             Start Your Learning Journey Today
           </motion.h2>
           <motion.p
-            className="text-xl text-white/90 max-w-2xl mx-auto mb-10 dark:text-gray-400"
+            className="text-xl text-white/90 max-w-2xl mx-auto mb-10 "
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}
