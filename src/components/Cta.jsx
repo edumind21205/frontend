@@ -42,7 +42,7 @@ function Cta() {
 
   return (
     <div>
-      <section className="py-20  hero-gradient bg-blue-500 dark:bg-slat-900 mb-10">
+      <section className="py-20 hero-gradient bg-blue-500  dark:bg-slat-900  mb-10">
         <div className="container mx-auto px-4 text-center" ref={ref}>
           <motion.h2
             className="text-3xl md:text-4xl font-bold text-white mb-6 font-accent"

@@ -145,7 +145,8 @@ export default function CoursesPage() {
         </div>
       </div>
       <Footer />
-      <ToastContainer position="top-center" autoClose={2000} />
+          <ToastContainer autoClose={1000} />
+
     </>
   );
 }

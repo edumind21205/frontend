@@ -108,7 +108,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
           
           {!showSidebarToggle && (
             <Link to="/">
-              <div className="flex items-center space-x-2 cursor-pointer">
+              <div className="flex items-center space-x-2 cursor-pointer dark:bg-slat-900">
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold">
                   {/* Replace <span >E</span> with logo image */}
                   <img
