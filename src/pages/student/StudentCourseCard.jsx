@@ -208,7 +208,9 @@ const StudentCourseCard = () => {
               {/* Quizzes */}
               <div>
                 <div className="font-semibold mb-2">
-                  Quizzes ({allQuizzes.filter(q => String(q.courseId) === String(course.courseId)).length})
+                  Quizzes ({Number.isFinite(allQuizzes.filter(q => String(q.courseId) === String(course.courseId)).length)
+                    ? allQuizzes.filter(q => String(q.courseId) === String(course.courseId)).length
+                    : 0})
                 </div>
                 {(() => {
                   const quizzesForCourse = allQuizzes.filter(q => String(q.courseId) === String(course.courseId));
@@ -220,7 +222,12 @@ const StudentCourseCard = () => {
                             <span className={`w-2 h-2 rounded-full ${quiz.completed ? "bg-green-500" : "bg-gray-400"}`}></span>
                             <span>{quiz.title}</span>
                             {quiz.completed ? (
-                              <span className="ml-2 text-xs text-green-600">Submitted{quiz.score !== null ? ` (Score: ${quiz.score})` : ""}</span>
+                              <span className="ml-2 text-xs text-green-600">
+                                Submitted
+                                {typeof quiz.score === "number"
+                                  ? ` (Score: ${quiz.score})`
+                                  : ""}
+                              </span>
                             ) : (
                               <span className="ml-2 text-xs text-gray-500">Not Submitted</span>
                             )}
@@ -236,7 +243,9 @@ const StudentCourseCard = () => {
               {/* Assignments */}
               <div className="mt-4">
                 <div className="font-semibold mb-2">
-                  Assignments ({Array.isArray(allAssignments[course.courseId]) ? allAssignments[course.courseId].length : 0})
+                  Assignments ({Array.isArray(allAssignments[course.courseId]) && typeof allAssignments[course.courseId].length === "number"
+                    ? allAssignments[course.courseId].length
+                    : 0})
                 </div>
                 {Array.isArray(allAssignments[course.courseId]) && allAssignments[course.courseId].length > 0 ? (
                   <ul className="space-y-1">
@@ -245,7 +254,12 @@ const StudentCourseCard = () => {
                         <span className={`w-2 h-2 rounded-full ${assignment.submitted ? "bg-green-500" : "bg-gray-400"}`}></span>
                         <span>{assignment.title}</span>
                         {assignment.submitted ? (
-                          <span className="ml-2 text-xs text-green-600">Submitted{assignment.marksObtained !== null ? ` (Marks: ${assignment.marksObtained})` : ""}</span>
+                          <span className="ml-2 text-xs text-green-600">
+                            Submitted
+                            {typeof assignment.marksObtained === "number"
+                              ? ` (Marks: ${assignment.marksObtained})`
+                              : ""}
+                          </span>
                         ) : (
                           <span className="ml-2 text-xs text-gray-500">Not Submitted</span>
                         )}

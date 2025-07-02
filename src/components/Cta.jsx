@@ -42,7 +42,7 @@ function Cta() {
 
   return (
     <div>
-      <section className="py-20 hero-gradient bg-blue-500 mb-10">
+      <section className="py-20  hero-gradient bg-blue-500 dark:bg-slat-900 mb-10">
         <div className="container mx-auto px-4 text-center" ref={ref}>
           <motion.h2
             className="text-3xl md:text-4xl font-bold text-white mb-6 font-accent"
@@ -53,7 +53,7 @@ function Cta() {
             Start Your Learning Journey Today
           </motion.h2>
           <motion.p
-            className="text-xl text-white/90 max-w-2xl mx-auto mb-10"
+            className="text-xl text-white/90 max-w-2xl mx-auto mb-10 dark:text-gray-400"
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}

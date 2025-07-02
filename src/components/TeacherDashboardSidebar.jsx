@@ -46,16 +46,15 @@ const TeacherDashboardSidebar = () => {
   const pathname = location.pathname;
   const navigate = useNavigate();
 
-  // Collapse sidebar on small screens automatically
+  // Hide sidebar on mobile
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   useEffect(() => {
     const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
       if (window.innerWidth < 768) {
-        setCollapsed(true);
-      } else {
         setCollapsed(false);
       }
     };
-    handleResize(); // Set initial state
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -69,6 +68,11 @@ const TeacherDashboardSidebar = () => {
   };
 
   const handleToggle = () => setCollapsed((prev) => !prev);
+
+  if (isMobile) {
+    // On mobile, render nothing (sidebar is now handled elsewhere)
+    return null;
+  }
 
   return (
     <div

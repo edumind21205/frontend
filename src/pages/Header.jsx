@@ -91,7 +91,7 @@ export default function Header({ sidebarOpen, onSidebarToggle, showSidebarToggle
   }, []);
 
   return (
-    <header className="bg-white dark:bg-white-800 shadow-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+    <header className="bg-white dark:bg-slat-900 shadow-sm border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         <div className="flex items-center space-x-3">
           {showSidebarToggle && (

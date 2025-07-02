@@ -7,7 +7,7 @@ function Std() {
 
   return (
     <div>
-      <main className="text-center py-20 px-4">
+      <main className="text-center py-20 px-4 bg-slate-50" >
         <p className="text-lg mb-8">
           Your all-in-one Learning Management System for Students, Teachers, and Admins.
         </p>

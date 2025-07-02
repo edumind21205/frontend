@@ -6,15 +6,16 @@ import {
   BarChart2,
   FileCheck2,
   Award,
-  // Calendar,
   Settings,
   LogOut,
   MessageSquare,
   Download,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Menu
 } from 'lucide-react';
 import { saveAllUserDataBeforeLogout } from "../lib/saveUserData";
+import { Button } from "./ui/button";
 
 const SidebarItem = ({ icon, label, active, href, onClick, collapsed }) => (
   <div
@@ -45,16 +46,15 @@ const StudentDashboardSidebar = () => {
   const pathname = location.pathname;
   const navigate = useNavigate();
 
-  // Collapse sidebar on small screens automatically
+  // Hide sidebar and show mobile menu button on mobile
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   useEffect(() => {
     const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
       if (window.innerWidth < 768) {
-        setCollapsed(true);
-      } else {
-        setCollapsed(false);
+        setCollapsed(false); // Always expanded on mobile (hidden)
       }
     };
-    handleResize(); // Set initial state
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -67,8 +67,13 @@ const StudentDashboardSidebar = () => {
     navigate("/"); // Redirect to landing/home page
   };
 
-  // Toggle sidebar collapse
+  // Toggle sidebar collapse (desktop only)
   const handleToggle = () => setCollapsed((prev) => !prev);
+
+  if (isMobile) {
+    // On mobile, render nothing (sidebar is now handled elsewhere)
+    return null;
+  }
 
   return (
     <div

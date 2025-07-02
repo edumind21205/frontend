@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { ChevronRight } from "lucide-react";
-import BuyButton from "../components/BuyButton";
+// import BuyButton from "../components/BuyButton";
+import EnrollButton from "../components/EnrollButton";
 import { motion } from "framer-motion"; // Add this import
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Feature() {
   const [courses, setCourses] = useState([]);
@@ -37,128 +38,74 @@ export default function Feature() {
   const bestSellCourses = courses.filter(course => course.category && course.category.toLowerCase() === "best seller");
 
   return (
-    <section
-      className="py-16 bg-slate-50 "
-    >
-      <div className="container mx-auto px-4">
-        <div
-          className="flex justify-between items-center mb-10 fade-in"
-        >
-          <h2 className="text-3xl font-bold text-gray-900  font-accent">
-            Featured Courses
-          </h2>
-          <Link to="/CoursesPage" className="hidden md:block">
-            <Button
-              variant="link"
-              className="text-primary hover:text-primary-light dark:hover:text-primary-light flex items-center font-medium"
-            >
-              View All Courses
-              <ChevronRight className="ml-1 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-        {/* Add featured course cards here */}
-        {loading && <div>Loading featured courses...</div>}
-        {error && <div className="text-red-500">{error}</div>}
-        {!loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {bestSellCourses.length === 0 ? (
-              <div>No 'Best Sell' courses available at the moment.</div>
-            ) : (
-              bestSellCourses.map((course, idx) => (
-                <motion.div
-                  key={course._id}
-                  className="border rounded-xl shadow bg-white flex flex-col max-w-xs w-full mx-auto h-full hover:shadow-lg transition-transform duration-300 hover:scale-105"
-                  style={{ minHeight: "420px", transitionProperty: "box-shadow, transform" }}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.15, duration: 0.7, ease: "easeOut" }}
-                >
-                  {course.picture && (
-                    <img
-                      src={course.picture.startsWith("http") ? course.picture : `https://eduminds-production-180d.up.railway.app/${course.picture}`}
-                      alt={course.title}
-                      className="w-full h-44 object-cover rounded-t-xl"
-                    />
-                  )}
-                  <div className="p-5 flex flex-col flex-1">
-                    <div className="font-bold text-lg mb-1">{course.title}</div>
-                    <div className="text-gray-600 text-sm mb-2 line-clamp-2">{course.description}</div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full capitalize">
-                        {course.category || "fantasy"}
-                      </span>
-                      <span className="text-green-700 font-semibold text-lg">
-                        Best sell
-                      </span>
-                    </div>
-                    <div className="mt-auto flex justify-end ml-30">
-                      {(() => {
-                        const token = localStorage.getItem("token");
-                        if (!token) {
-                          // Not logged in: show plain Enroll Now button
-                          return (
-                            <button
-                              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full"
-                              onClick={() => navigate("/auth/login")}
-                            >
-                              Enroll Now
-                            </button>
-                          );
-                        }
-                        // Logged in: show BuyButton with enrollment logic
-                        return (
-                          <button
-                            onClick={async () => {
-                              const token = localStorage.getItem("token");
-                              if (!token) {
-                                navigate("/auth/login");
-                                return;
-                              }
-                              try {
-                                // Check user role first
-                                const res = await fetch("https://eduminds-production-180d.up.railway.app/api/auth/me", {
-                                  headers: { Authorization: `Bearer ${token}` },
-                                });
-                                if (!res.ok) throw new Error("Failed to fetch user info");
-                                const user = await res.json();
-                                if (user.role && user.role.toLowerCase() === "student") {
-                                  // Only check enrollment if user is student
-                                  const enrollRes = await fetch(`https://eduminds-production-180d.up.railway.app/api/enrollments/check/${course._id}`, {
-                                    headers: { Authorization: `Bearer ${token}` },
-                                  });
-                                  if (!enrollRes.ok) throw new Error("Failed to check enrollment");
-                                  const enrollData = await enrollRes.json();
-                                  const alreadyEnrolled = enrollData.enrolled !== undefined ? enrollData.enrolled : enrollData.isEnrolled;
-                                  if (alreadyEnrolled) {
-                                    toast.info("Already enrolled in this course");
-                                    // Do NOT navigate to checkout page
-                                    return;
-                                  }
-                                  navigate(`/checkout/${course._id}`);
-                                } else {
-                                  toast.info("Please login as a student to enroll.");
-                                }
-                              } catch {
-                                toast.err("Unable to verify user role. Please login again.");
-                                navigate("/auth/login");
-                              }
-                            }}
-                            className="w-full"
-                            style={{ background: "none", border: "none", padding: 0 }}
-                          >
-                            <BuyButton course={course} />
-                          </button>
-                        );
-                      })()}
-                    </div>
-                  </div>
-                </motion.div>
-              ))
-            )}
+    <>
+      <ToastContainer />
+      <section
+        className="py-16 bg-slate-50 "
+      >
+        <div className="container mx-auto px-4">
+          <div
+            className="flex justify-between items-center mb-10 fade-in"
+          >
+            <h2 className="text-3xl font-bold text-gray-900  font-accent">
+              Featured Courses
+            </h2>
+            <Link to="/CoursesPage" className="hidden md:block">
+              <Button
+                variant="link"
+                className="text-primary hover:text-primary-light dark:hover:text-primary-light flex items-center font-medium"
+              >
+                View All Courses
+                <ChevronRight className="ml-1 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
-        )}
-      </div>
-    </section>
+          {/* Add featured course cards here */}
+          {loading && <div>Loading featured courses...</div>}
+          {error && <div className="text-red-500">{error}</div>}
+          {!loading && !error && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {bestSellCourses.length === 0 ? (
+                <div>No 'Best Sell' courses available at the moment.</div>
+              ) : (
+                bestSellCourses.map((course, idx) => (
+                  <motion.div
+                    key={course._id}
+                    className="border rounded-xl shadow bg-white flex flex-col max-w-xs w-full mx-auto h-full hover:shadow-lg transition-transform duration-300 hover:scale-105"
+                    style={{ minHeight: "420px", transitionProperty: "box-shadow, transform" }}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.15, duration: 0.7, ease: "easeOut" }}
+                  >
+                    {course.picture && (
+                      <img
+                        src={course.picture.startsWith("http") ? course.picture : `https://eduminds-production-180d.up.railway.app/${course.picture}`}
+                        alt={course.title}
+                        className="w-full h-44 object-cover rounded-t-xl"
+                      />
+                    )}
+                    <div className="p-5 flex flex-col flex-1">
+                      <div className="font-bold text-lg mb-1">{course.title}</div>
+                      <div className="text-gray-600 text-sm mb-2 line-clamp-2">{course.description}</div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full capitalize">
+                          {course.category || "fantasy"}
+                        </span>
+                        <span className="text-green-700 font-semibold text-lg">
+                          Best sell
+                        </span>
+                      </div>
+                      <div className="mt-auto flex justify-end ml-30">
+                        <EnrollButton course={course} />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   )
 }
