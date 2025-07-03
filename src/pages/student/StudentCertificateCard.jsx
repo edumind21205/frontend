@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLoading } from "../../context/LoadingContext";
 
 export default function StudentCertificateCard() {
   const [certificates, setCertificates] = useState([]);

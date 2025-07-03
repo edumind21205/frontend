@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import StudentCard from './AdminStudentsCard'
 import AdminReportCard from './AdminReportCard'
 import QnA from './AdminQnaCard'
-import AdminpaymentCard from './AdminPaymentCard' // <-- Fix import case here
+import AdminpaymentCard from './AdminpaymentCard' // <-- Fix import case here
 import AdminCertificateCard from './AdminCertificateCard'
 import SearchBar from '../../components/SearchBar'
 
