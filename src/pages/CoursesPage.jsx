@@ -96,7 +96,16 @@ export default function CoursesPage() {
     fetchCourses();
   }, []);
 
-  if (loading) return <div className="p-4">Loading courses...</div>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        {/* Spinner as in StatsCard */}
+        <div className="flex flex-col items-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+          <span className="text-blue-600 font-medium mt-2">Loading courses...</span>
+        </div>
+      </div>
+    );
   if (error) return <div className="p-4 text-red-500">{error}</div>;
   if (!courses.length) return <div className="p-4">No courses available at the moment.</div>;
 
@@ -145,8 +154,7 @@ export default function CoursesPage() {
         </div>
       </div>
       <Footer />
-          <ToastContainer autoClose={1000} />
-
+      <ToastContainer autoClose={1000} />
     </>
   );
 }

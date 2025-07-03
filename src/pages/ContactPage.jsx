@@ -5,7 +5,8 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
-import { useToast } from "../hooks/use-toast";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from './Header';
 import Cta from '../components/Cta';
 import Footer from './Footer';
@@ -19,7 +20,6 @@ import {
 import { sendContactMessage } from '../services/contactService';
 
 export default function ContactPage() {
-  const { toast } = useToast();
   const formRef = useRef();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -57,22 +57,11 @@ export default function ContactPage() {
     };
     try {
       await sendContactMessage(data);
-      // Force a re-render to trigger the toast (workaround for some custom hooks)
-      setTimeout(() => {
-        toast({
-          title: 'Message sent!',
-          description: "We've received your message and will respond soon.",
-        });
-      }, 0);
+      // Use react-toastify's toast
+      toast.success("Message sent! We've received your message and will respond soon.");
       form.reset();
     } catch (err) {
-      setTimeout(() => {
-        toast({
-          title: 'Failed to send message',
-          description: err?.response?.data?.error || 'Please try again later.',
-          variant: 'destructive',
-        });
-      }, 0);
+      toast.error(err?.response?.data?.error || 'Failed to send message. Please try again later.');
     }
   };
 
@@ -365,6 +354,7 @@ export default function ContactPage() {
         </motion.div>
       </div>
       <Footer />
+      <ToastContainer autoClose={1000} />
     </>
   );
 }
