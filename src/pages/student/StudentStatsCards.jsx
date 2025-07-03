@@ -4,9 +4,11 @@ import { BookOpen, UserCheck, FileText, BarChart2, Users } from "lucide-react";
 
 const StudentStatsCards = () => {
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
+      setLoading(true);
       try {
         const token = localStorage.getItem("token"); // always get fresh token
         const res = await fetch("https://eduminds-production-180d.up.railway.app/api/student/dashboard/student-dashboard", {
@@ -16,13 +18,22 @@ const StudentStatsCards = () => {
         });
         const data = await res.json();
         setStats(data);
-        // Removed problematic localStorage.setItem that overwrites the user object
       } catch (err) {
         console.error("Failed to load Student Dashboard", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchStats();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+      </div>
+    );
+  }
 
   if (!stats) return <p>Loading...</p>;
 

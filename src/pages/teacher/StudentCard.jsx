@@ -81,6 +81,12 @@ export default function StudentCard() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      {/* Loading spinner */}
+      {loading && (
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+        </div>
+      )}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-blue-800 mb-2">
@@ -160,7 +166,6 @@ export default function StudentCard() {
         </div>
       )}
 
-      {loading && <p>Loading users...</p>}
       {error && <p className="text-red-600">{error}</p>}
       {!loading && users.length === 0 && <p>No students found.</p>}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

@@ -495,7 +495,9 @@ const TeacherGradeSubmissions = ({ assignmentId: propAssignmentId, onBack }) => 
           <h2 className="text-2xl font-semibold text-blue-700">Student Submissions</h2>
         </div>
         {loading ? (
-          <div>Loading...</div>
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+          </div>
         ) : (
           selectedAssignmentId && submissions && submissions.length > 0 ? (
             <div className="overflow-x-auto">

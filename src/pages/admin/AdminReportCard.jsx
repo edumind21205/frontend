@@ -249,107 +249,247 @@ export default function AdminReportCard() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-        <div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-800 mb-2">
-            Courses & Users Report
-            {selectedCourseId && (
-              <span className="ml-2 text-lg text-green-700 font-normal">
-                (Single Course)
-              </span>
-            )}
-          </h2>
-          <p className="text-gray-600 text-base md:text-lg">
-            Download and analyze course, user, certificate, and assignment statistics.
-          </p>
+      {/* Loading spinner */}
+      {loading && (
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
         </div>
-        <img
-          src="/assets/logo.png"
-          alt="Certificates"
-          className="w-24 h-24 md:w-32 md:h-32 object-contain hidden md:block"
-        />
-      </div>
-      {/* Download/filter buttons for all courses or single course */}
-      {(selectedCourseId || !selectedCourseId) && (
-        <div className="mb-4 flex gap-2">
-          <button
-            className="px-3 py-1 rounded border bg-green-600 text-white"
-            onClick={handleDownloadCSV}
-          >
-            Download CSV
-          </button>
-          <button
-            className="px-3 py-1 rounded border bg-red-600 text-white"
-            onClick={handleDownloadPDF}
-          >
-            Download PDF
-          </button>
-          {/* Only show filter buttons if not in single course mode */}
-          {!selectedCourseId && (
-            <>
+      )}
+      {!loading && (
+        <>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-blue-800 mb-2">
+                Courses & Users Report
+                {selectedCourseId && (
+                  <span className="ml-2 text-lg text-green-700 font-normal">
+                    (Single Course)
+                  </span>
+                )}
+              </h2>
+              <p className="text-gray-600 text-base md:text-lg">
+                Download and analyze course, user, certificate, and assignment statistics.
+              </p>
+            </div>
+            <img
+              src="/assets/logo.png"
+              alt="Certificates"
+              className="w-24 h-24 md:w-32 md:h-32 object-contain hidden md:block"
+            />
+          </div>
+          {/* Download/filter buttons for all courses or single course */}
+          {(selectedCourseId || !selectedCourseId) && (
+            <div className="mb-4 flex gap-2">
               <button
-                className={`px-3 py-1 rounded border ${filter === "none" ? "bg-blue-600 text-white" : "bg-gray-100"}`}
-                onClick={() => setFilter("none")}
+                className="px-3 py-1 rounded border bg-green-600 text-white"
+                onClick={handleDownloadCSV}
               >
-                All Courses
+                Download CSV
               </button>
               <button
-                className={`px-3 py-1 rounded border ${filter === "high-enrollment" ? "bg-blue-600 text-white" : "bg-gray-100"} hidden sm:inline-block`}
-                onClick={() => setFilter("high-enrollment")}
+                className="px-3 py-1 rounded border bg-red-600 text-white"
+                onClick={handleDownloadPDF}
               >
-                Highest Enrollment
+                Download PDF
               </button>
-              <button
-                className={`px-3 py-1 rounded border ${filter === "high-certificate" ? "bg-blue-600 text-white" : "bg-gray-100"} hidden sm:inline-block`}
-                onClick={() => setFilter("high-certificate")}
-              >
-                Highest Certificates
-              </button>
-            </>
+              {/* Only show filter buttons if not in single course mode */}
+              {!selectedCourseId && (
+                <>
+                  <button
+                    className={`px-3 py-1 rounded border ${filter === "none" ? "bg-blue-600 text-white" : "bg-gray-100"}`}
+                    onClick={() => setFilter("none")}
+                  >
+                    All Courses
+                  </button>
+                  <button
+                    className={`px-3 py-1 rounded border ${filter === "high-enrollment" ? "bg-blue-600 text-white" : "bg-gray-100"} hidden sm:inline-block`}
+                    onClick={() => setFilter("high-enrollment")}
+                  >
+                    Highest Enrollment
+                  </button>
+                  <button
+                    className={`px-3 py-1 rounded border ${filter === "high-certificate" ? "bg-blue-600 text-white" : "bg-gray-100"} hidden sm:inline-block`}
+                    onClick={() => setFilter("high-certificate")}
+                  >
+                    Highest Certificates
+                  </button>
+                </>
+              )}
+            </div>
           )}
-        </div>
-      )}
-      {/* Show back button in single course mode */}
-      {selectedCourseId && (
-        <div className="mb-4">
-          <button
-            className="px-3 py-1 rounded border bg-blue-600 text-white"
-            onClick={() => setSelectedCourseId(null)}
-          >
-            &larr; Back to All Courses
-          </button>
-        </div>
-      )}
-      {loading && <p>Loading report...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {!loading && !error && filteredReport.length === 0 && <p>No data found.</p>}
-      {!loading && !error && filteredReport.length > 0 && (
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
-            <thead>
-              <tr>
-                <th className="px-2 md:px-4 py-2">Course Title</th>
-                <th className="px-2 md:px-4 py-2 hidden sm:table-cell">Category</th>
-                <th className="px-2 md:px-4 py-2 hidden md:table-cell">Price</th>
-                <th className="px-2 md:px-4 py-2 hidden md:table-cell">Teacher</th>
-                <th className="px-2 md:px-4 py-2">Total Enrolled</th>
-                <th className="px-2 md:px-4 py-2 hidden sm:table-cell">Total Completed</th>
-                <th className="px-2 md:px-4 py-2 hidden sm:table-cell">Total Certified</th>
-                <th className="px-2 md:px-4 py-2">Details</th>
-                {!selectedCourseId && <th className="px-2 md:px-4 py-2">Report</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredReport.map((course) => {
-                const courseId = course.courseId || course._id;
-                const details = courseDetails[courseId] || {};
-                return (
-                  <React.Fragment key={courseId}>
-                    <tr className="bg-white even:bg-gray-50 hover:bg-blue-50 transition-colors ">
-                      <td className="px-2 md:px-4 py-2 font-semibold max-w-[180px] md:max-w-xs break-words  group-hover:!bg-blue-50">
-                        {course.title || "-"}
-                        {/* Lessons, Quizzes, Assignments */}
-                        <div className="mt-2 text-xs text-gray-700">
+          {/* Show back button in single course mode */}
+          {selectedCourseId && (
+            <div className="mb-4">
+              <button
+                className="px-3 py-1 rounded border bg-blue-600 text-white"
+                onClick={() => setSelectedCourseId(null)}
+              >
+                &larr; Back to All Courses
+              </button>
+            </div>
+          )}
+          {error && <p className="text-red-600">{error}</p>}
+          {!loading && !error && filteredReport.length === 0 && <p>No data found.</p>}
+          {!loading && !error && filteredReport.length > 0 && (
+            <div className="overflow-x-auto w-full">
+              <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
+                <thead>
+                  <tr>
+                    <th className="px-2 md:px-4 py-2">Course Title</th>
+                    <th className="px-2 md:px-4 py-2 hidden sm:table-cell">Category</th>
+                    <th className="px-2 md:px-4 py-2 hidden md:table-cell">Price</th>
+                    <th className="px-2 md:px-4 py-2 hidden md:table-cell">Teacher</th>
+                    <th className="px-2 md:px-4 py-2">Total Enrolled</th>
+                    <th className="px-2 md:px-4 py-2 hidden sm:table-cell">Total Completed</th>
+                    <th className="px-2 md:px-4 py-2 hidden sm:table-cell">Total Certified</th>
+                    <th className="px-2 md:px-4 py-2">Details</th>
+                    {!selectedCourseId && <th className="px-2 md:px-4 py-2">Report</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredReport.map((course) => {
+                    const courseId = course.courseId || course._id;
+                    const details = courseDetails[courseId] || {};
+                    return (
+                      <React.Fragment key={courseId}>
+                        <tr className="bg-white even:bg-gray-50 hover:bg-blue-50 transition-colors ">
+                          <td className="px-2 md:px-4 py-2 font-semibold max-w-[180px] md:max-w-xs break-words  group-hover:!bg-blue-50">
+                            {course.title || "-"}
+                            {/* Lessons, Quizzes, Assignments */}
+                            <div className="mt-2 text-xs text-gray-700">
+                              <div>
+                                <span className="font-semibold">Lessons:</span>
+                                {details.lessons && details.lessons.length > 0 ? (
+                                  <ul className="list-disc ml-4">
+                                    {details.lessons.map((l) => (
+                                      <li key={l._id || l.lessonId}>{l.title}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <span className="ml-2 text-gray-400">None</span>
+                                )}
+                              </div>
+                              <div className="mt-1">
+                                <span className="font-semibold">Quizzes:</span>
+                                {details.quizzes && details.quizzes.length > 0 ? (
+                                  <ul className="list-disc ml-4">
+                                    {details.quizzes.map((q) => (
+                                      <li key={q._id || q.quizId}>{q.title}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <span className="ml-2 text-gray-400">None</span>
+                                )}
+                              </div>
+                              <div className="mt-1">
+                                <span className="font-semibold">Assignments:</span>
+                                {Array.isArray(details.assignments) && details.assignments.length > 0 ? (
+                                  <ul className="list-disc ml-4">
+                                    {details.assignments.map((a, idx) => (
+                                      <li key={a._id || a.assignmentId || a.title || idx}>
+                                        {a.title || JSON.stringify(a)}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <span className="ml-2 text-gray-400">None</span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-2 md:px-4 py-2 hidden sm:table-cell">{course.category || "-"}</td>
+                          <td className="px-2 md:px-4 py-2 hidden md:table-cell">{course.price != null ? `${course.price}` : "-"}</td>
+                          <td className="px-2 md:px-4 py-2 hidden md:table-cell">
+                            {course.teacher ? (
+                              <>
+                                <div>{course.teacher.name || "-"}</div>
+                                <div className="text-xs text-gray-500">{course.teacher.email || "-"}</div>
+                              </>
+                            ) : "-"
+                            }
+                          </td>
+                          <td className="px-2 md:px-4 py-2">{course.totalEnrolled ?? 0}</td>
+                          <td className="px-2 md:px-4 py-2 hidden sm:table-cell">{course.totalCompleted ?? 0}</td>
+                          <td className="px-2 md:px-4 py-2 hidden sm:table-cell">{course.totalCertified ?? 0}</td>
+                          {/* <td className="px-4 py-2">
+                            {details.assignments ? details.assignments.length : 0}
+                          </td> */}
+                          <td className="px-2 md:px-4 py-2">
+                            <details>
+                              <summary className="cursor-pointer text-blue-600">View</summary>
+                              <div className="mt-2">
+                                <strong>Enrolled Students:</strong>
+                                <ul className="list-disc ml-6">
+                                  {(course.enrolledStudents?.length ?? 0) === 0 && <li>None</li>}
+                                  {(course.enrolledStudents || []).map((s, idx) => (
+                                    <li key={s.studentId || idx}>
+                                      {s.name || "Unknown"} ({s.email || "Unknown"}) - Progress: {s.progress ?? 0}%
+                                      {s.certificateIssued && <span className="ml-2 text-green-600">[Certificate Issued]</span>}
+                                      {s.certificateRevoked && <span className="ml-2 text-red-600">[Revoked]</span>}
+                                    </li>
+                                  ))}
+                                </ul>
+                                <strong className="block mt-2">Completed Students:</strong>
+                                <ul className="list-disc ml-6">
+                                  {(course.completedStudents?.length ?? 0) === 0 && <li>None</li>}
+                                  {(course.completedStudents || []).map((s, idx) => (
+                                    <li key={s.studentId || idx}>
+                                      {s.name || "Unknown"} ({s.email || "Unknown"}) - Progress: {s.progress ?? 0}%
+                                    </li>
+                                  ))}
+                                </ul>
+                                <strong className="block mt-2">Certified Students:</strong>
+                                <ul className="list-disc ml-6">
+                                  {(course.certifiedStudents?.length ?? 0) === 0 && <li>None</li>}
+                                  {(course.certifiedStudents || []).map((s, idx) => (
+                                    <li key={s.studentId || idx}>
+                                      {s.name || "Unknown"} ({s.email || "Unknown"}) - Progress: {s.progress ?? 0}%
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </details>
+                          </td>
+                          {!selectedCourseId && (
+                            <td className="px-2 md:px-4 py-2">
+                              <button
+                                className="px-2 py-1 rounded bg-blue-500 text-white text-xs"
+                                onClick={() => setSelectedCourseId(courseId)}
+                              >
+                                View Report
+                              </button>
+                            </td>
+                          )}
+                        </tr>
+                      </React.Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+              {/* Responsive card view for mobile */}
+              <div className="block sm:hidden mt-6 space-y-4">
+                {filteredReport.map((course) => {
+                  const courseId = course.courseId || course._id;
+                  const details = courseDetails[courseId] || {};
+                  return (
+                    <div key={courseId} className="bg-white rounded-lg shadow p-4">
+                      <div className="font-bold text-blue-800 text-lg mb-1">{course.title || "-"}</div>
+                      <div className="text-gray-600 text-xs mb-2">{course.category || "-"}</div>
+                      <div className="flex flex-wrap gap-2 text-xs mb-2">
+                        <span className="bg-blue-100 px-2 py-1 rounded">Enrolled: {course.totalEnrolled ?? 0}</span>
+                        <span className="bg-green-100 px-2 py-1 rounded">Completed: {course.totalCompleted ?? 0}</span>
+                        <span className="bg-yellow-100 px-2 py-1 rounded">Certified: {course.totalCertified ?? 0}</span>
+                      </div>
+                      <div className="mb-2">
+                        <span className="font-semibold">Teacher:</span> {course.teacher?.name || "-"}
+                      </div>
+                      <div className="mb-2">
+                        <span className="font-semibold">Assignments:</span> {Array.isArray(details.assignments) ? details.assignments.length : 0}
+                      </div>
+                      <details className="mb-2">
+                        <summary className="cursor-pointer text-blue-600">Details</summary>
+                        <div className="mt-2">
+                          {/* Lessons, Quizzes, Assignments */}
                           <div>
                             <span className="font-semibold">Lessons:</span>
                             {details.lessons && details.lessons.length > 0 ? (
@@ -389,153 +529,22 @@ export default function AdminReportCard() {
                             )}
                           </div>
                         </div>
-                      </td>
-                      <td className="px-2 md:px-4 py-2 hidden sm:table-cell">{course.category || "-"}</td>
-                      <td className="px-2 md:px-4 py-2 hidden md:table-cell">{course.price != null ? `${course.price}` : "-"}</td>
-                      <td className="px-2 md:px-4 py-2 hidden md:table-cell">
-                        {course.teacher ? (
-                          <>
-                            <div>{course.teacher.name || "-"}</div>
-                            <div className="text-xs text-gray-500">{course.teacher.email || "-"}</div>
-                          </>
-                        ) : "-"
-                        }
-                      </td>
-                      <td className="px-2 md:px-4 py-2">{course.totalEnrolled ?? 0}</td>
-                      <td className="px-2 md:px-4 py-2 hidden sm:table-cell">{course.totalCompleted ?? 0}</td>
-                      <td className="px-2 md:px-4 py-2 hidden sm:table-cell">{course.totalCertified ?? 0}</td>
-                      {/* <td className="px-4 py-2">
-                        {details.assignments ? details.assignments.length : 0}
-                      </td> */}
-                      <td className="px-2 md:px-4 py-2">
-                        <details>
-                          <summary className="cursor-pointer text-blue-600">View</summary>
-                          <div className="mt-2">
-                            <strong>Enrolled Students:</strong>
-                            <ul className="list-disc ml-6">
-                              {(course.enrolledStudents?.length ?? 0) === 0 && <li>None</li>}
-                              {(course.enrolledStudents || []).map((s, idx) => (
-                                <li key={s.studentId || idx}>
-                                  {s.name || "Unknown"} ({s.email || "Unknown"}) - Progress: {s.progress ?? 0}%
-                                  {s.certificateIssued && <span className="ml-2 text-green-600">[Certificate Issued]</span>}
-                                  {s.certificateRevoked && <span className="ml-2 text-red-600">[Revoked]</span>}
-                                </li>
-                              ))}
-                            </ul>
-                            <strong className="block mt-2">Completed Students:</strong>
-                            <ul className="list-disc ml-6">
-                              {(course.completedStudents?.length ?? 0) === 0 && <li>None</li>}
-                              {(course.completedStudents || []).map((s, idx) => (
-                                <li key={s.studentId || idx}>
-                                  {s.name || "Unknown"} ({s.email || "Unknown"}) - Progress: {s.progress ?? 0}%
-                                </li>
-                              ))}
-                            </ul>
-                            <strong className="block mt-2">Certified Students:</strong>
-                            <ul className="list-disc ml-6">
-                              {(course.certifiedStudents?.length ?? 0) === 0 && <li>None</li>}
-                              {(course.certifiedStudents || []).map((s, idx) => (
-                                <li key={s.studentId || idx}>
-                                  {s.name || "Unknown"} ({s.email || "Unknown"}) - Progress: {s.progress ?? 0}%
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </details>
-                      </td>
+                      </details>
                       {!selectedCourseId && (
-                        <td className="px-2 md:px-4 py-2">
-                          <button
-                            className="px-2 py-1 rounded bg-blue-500 text-white text-xs"
-                            onClick={() => setSelectedCourseId(courseId)}
-                          >
-                            View Report
-                          </button>
-                        </td>
+                        <button
+                          className="px-2 py-1 rounded bg-blue-500 text-white text-xs w-full"
+                          onClick={() => setSelectedCourseId(courseId)}
+                        >
+                          View Report
+                        </button>
                       )}
-                    </tr>
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-          {/* Responsive card view for mobile */}
-          <div className="block sm:hidden mt-6 space-y-4">
-            {filteredReport.map((course) => {
-              const courseId = course.courseId || course._id;
-              const details = courseDetails[courseId] || {};
-              return (
-                <div key={courseId} className="bg-white rounded-lg shadow p-4">
-                  <div className="font-bold text-blue-800 text-lg mb-1">{course.title || "-"}</div>
-                  <div className="text-gray-600 text-xs mb-2">{course.category || "-"}</div>
-                  <div className="flex flex-wrap gap-2 text-xs mb-2">
-                    <span className="bg-blue-100 px-2 py-1 rounded">Enrolled: {course.totalEnrolled ?? 0}</span>
-                    <span className="bg-green-100 px-2 py-1 rounded">Completed: {course.totalCompleted ?? 0}</span>
-                    <span className="bg-yellow-100 px-2 py-1 rounded">Certified: {course.totalCertified ?? 0}</span>
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-semibold">Teacher:</span> {course.teacher?.name || "-"}
-                  </div>
-                  <div className="mb-2">
-                    <span className="font-semibold">Assignments:</span> {Array.isArray(details.assignments) ? details.assignments.length : 0}
-                  </div>
-                  <details className="mb-2">
-                    <summary className="cursor-pointer text-blue-600">Details</summary>
-                    <div className="mt-2">
-                      {/* Lessons, Quizzes, Assignments */}
-                      <div>
-                        <span className="font-semibold">Lessons:</span>
-                        {details.lessons && details.lessons.length > 0 ? (
-                          <ul className="list-disc ml-4">
-                            {details.lessons.map((l) => (
-                              <li key={l._id || l.lessonId}>{l.title}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span className="ml-2 text-gray-400">None</span>
-                        )}
-                      </div>
-                      <div className="mt-1">
-                        <span className="font-semibold">Quizzes:</span>
-                        {details.quizzes && details.quizzes.length > 0 ? (
-                          <ul className="list-disc ml-4">
-                            {details.quizzes.map((q) => (
-                              <li key={q._id || q.quizId}>{q.title}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span className="ml-2 text-gray-400">None</span>
-                        )}
-                      </div>
-                      <div className="mt-1">
-                        <span className="font-semibold">Assignments:</span>
-                        {Array.isArray(details.assignments) && details.assignments.length > 0 ? (
-                          <ul className="list-disc ml-4">
-                            {details.assignments.map((a, idx) => (
-                              <li key={a._id || a.assignmentId || a.title || idx}>
-                                {a.title || JSON.stringify(a)}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span className="ml-2 text-gray-400">None</span>
-                        )}
-                      </div>
                     </div>
-                  </details>
-                  {!selectedCourseId && (
-                    <button
-                      className="px-2 py-1 rounded bg-blue-500 text-white text-xs w-full"
-                      onClick={() => setSelectedCourseId(courseId)}
-                    >
-                      View Report
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLoading } from "../../context/LoadingContext";
 
 export default function StudentCertificateCard() {
   const [certificates, setCertificates] = useState([]);
@@ -58,7 +59,13 @@ export default function StudentCertificateCard() {
     }
   };
 
-  if (loading) return <div className="p-4">Loading certificates...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+      </div>
+    );
+  }
   if (error) return <div className="p-4 text-red-500">{error}</div>;
   if (!certificates.length)
     return <div className="p-4">You have not earned any certificates yet.</div>;

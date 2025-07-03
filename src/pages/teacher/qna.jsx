@@ -7,6 +7,7 @@ export default function QnA() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [questionText, setQuestionText] = useState("");
   const [answerInputs, setAnswerInputs] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
   const userStr = localStorage.getItem("user");
@@ -18,6 +19,7 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
   // Fetch courses depending on role
   useEffect(() => {
     const fetchCourses = async () => {
+      setLoading(true);
       try {
         const url = isStudent
           ? "https://eduminds-production-180d.up.railway.app/api/student/enrolled-courses"
@@ -30,6 +32,7 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
       } catch (err) {
         toast.error("Failed to load courses");
       }
+      setLoading(false);
     };
     fetchCourses();
   }, [isStudent, token]);
@@ -37,6 +40,7 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
   // Fetch Q&A data
   useEffect(() => {
     const fetchQuestions = async () => {
+      setLoading(true);
       try {
         const res = await fetch("https://eduminds-production-180d.up.railway.app/api/qna/all", {
           headers: { Authorization: `Bearer ${token}` },
@@ -46,6 +50,7 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
       } catch (err) {
         toast.error("Failed to load questions");
       }
+      setLoading(false);
     };
     fetchQuestions();
   }, [token]);
@@ -132,6 +137,13 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      {/* Loading spinner */}
+      {loading && (
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-blue-800 mb-2 md:mb-0">Q&amp;A Section</h2>

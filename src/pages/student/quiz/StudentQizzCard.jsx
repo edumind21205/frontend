@@ -266,7 +266,6 @@ const StudentQuizzCard = () => {
       setAllResults(data.results || []);
       setShowResults(true);
       setShowDashboard(false);
-      // localStorage updated by useEffect
     } catch (err) {
       setError("Failed to load all quiz results.");
     } finally {
@@ -283,7 +282,6 @@ const StudentQuizzCard = () => {
       setDashboardCards(data.quizCards || []);
       setShowDashboard(true);
       setShowResults(false);
-      // localStorage updated by useEffect
     } catch (err) {
       setError("Failed to load dashboard.");
     } finally {
@@ -315,7 +313,13 @@ const StudentQuizzCard = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [activeQuiz, quizData, answers]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+      </div>
+    );
+  }
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (

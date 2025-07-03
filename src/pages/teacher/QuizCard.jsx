@@ -221,44 +221,52 @@ export default function QuizCard() {
             <h2 className="text-2xl font-bold mb-6 flex items-center justify-between text-blue-700">
               Quizzes for Selected Course
             </h2>
-            {loading && <p>Loading quizzes...</p>}
-            {error && <p className="text-red-600">{error}</p>}
-            {!loading && quizzes.length === 0 && <p>No quizzes found.</p>}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {quizzes.map((quiz) => (
-                <div
-                  key={quiz._id}
-                  className="rounded-xl bg-white border shadow-lg hover:shadow-2xl transition flex flex-col overflow-hidden"
-                  style={{ minHeight: 220 }}
-                >
-                  <div className="flex-1 flex flex-col p-4">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-gray-500 font-semibold">
-                        Quiz ID: {quiz._id.slice(-6)}
-                      </span>
-                      <span className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 font-semibold capitalize">
-                        {quiz.title}
-                      </span>
+            {loading ? (
+              <div className="flex justify-center items-center py-10">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+              </div>
+            ) : (
+              <>
+                {error && <p className="text-red-600">{error}</p>}
+                {!loading && quizzes.length === 0 && <p>No quizzes found.</p>}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {quizzes.map((quiz) => (
+                    <div
+                      key={quiz._id}
+                      className="rounded-xl bg-white border shadow-lg hover:shadow-2xl transition flex flex-col overflow-hidden"
+                      style={{ minHeight: 220 }}
+                    >
+                      <div className="flex-1 flex flex-col p-4">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-gray-500 font-semibold">
+                            Quiz ID: {quiz._id.slice(-6)}
+                          </span>
+                          <span className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700 font-semibold capitalize">
+                            {quiz.title}
+                          </span>
+                        </div>
+                        <div className="text-xs text-gray-400 mb-2">
+                          Created: {quiz.createdAt ? new Date(quiz.createdAt).toLocaleDateString() : "N/A"}
+                        </div>
+                        <div className="mt-2">
+                          <h4 className="font-bold text-sm mb-1">
+                            Questions: {quiz.questions?.length || 0}
+                          </h4>
+                          <ul className="list-disc pl-4 text-xs">
+                            {quiz.questions?.map((q, i) => (
+                              <li key={i}>
+                                <span className="font-semibold">{q.questionText}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-xs text-gray-400 mb-2">
-                      Created: {quiz.createdAt ? new Date(quiz.createdAt).toLocaleDateString() : "N/A"}
-                    </div>
-                    <div className="mt-2">
-                      <h4 className="font-bold text-sm mb-1">
-                        Questions: {quiz.questions?.length || 0}
-                      </h4>
-                      <ul className="list-disc pl-4 text-xs">
-                        {quiz.questions?.map((q, i) => (
-                          <li key={i}>
-                            <span className="font-semibold">{q.questionText}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
+            {/* ...existing code... */}
           </>
         )}
       </div>

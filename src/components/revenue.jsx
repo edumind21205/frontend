@@ -29,7 +29,7 @@ export default function RevenueCircle({ revenue = 0 }) {
 
   // Circle animation
   // Set maxRevenue to a realistic value or make it dynamic
-  const maxRevenue = 10000; // Example: 10,000 PKR for demo/testing
+  const maxRevenue = 900000; // Set to 1,000,000 PKR as a realistic example
   // If you want it dynamic, you could use: Math.max(10000, revenue)
   const percent = Math.min(revenue / maxRevenue, 1);
   const radius = 70;

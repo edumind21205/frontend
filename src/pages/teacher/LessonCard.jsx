@@ -224,6 +224,12 @@ export default function LessonCard() {
           className="w-24 h-24 md:w-32 md:h-32 object-contain hidden md:block"
         />
       </div>
+      {/* Loading spinner */}
+      {loading && (
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+        </div>
+      )}
       <div className="bg-white p-4 md:p-8 rounded-xl shadow-lg mb-10">
         <h2 className="text-2xl font-bold mb-4">Add Lesson to Course</h2>
         {message && (

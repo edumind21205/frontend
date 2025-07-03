@@ -123,6 +123,7 @@ const StudentProgressCard = () => {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+        window.dispatchEvent(new CustomEvent("lesson-downloaded")); // Notify other tabs/pages
         setDownloadingLessonId(null);
         return;
       }
@@ -136,14 +137,14 @@ const StudentProgressCard = () => {
         const data = await response.json();
         if (!response.ok) {
           alert(data.message || "Download failed");
+          setDownloadingLessonId(null);
           return;
         }
         if (data.url) {
           if (resourceType === "PDF") {
-            // Open in new tab (fallback for protected PDFs)
             window.open(data.url, "_blank", "noopener,noreferrer");
+            window.dispatchEvent(new CustomEvent("lesson-downloaded"));
           } else if (resourceType === "VIDEO") {
-            // For videos, fetch as blob and trigger download
             const videoRes = await fetch(data.url);
             const videoBlob = await videoRes.blob();
             const videoUrl = window.URL.createObjectURL(videoBlob);
@@ -154,8 +155,8 @@ const StudentProgressCard = () => {
             a.click();
             a.remove();
             window.URL.revokeObjectURL(videoUrl);
+            window.dispatchEvent(new CustomEvent("lesson-downloaded"));
           } else {
-            // fallback: open as link
             const link = document.createElement("a");
             link.href = data.url;
             link.setAttribute("download", "");
@@ -163,14 +164,18 @@ const StudentProgressCard = () => {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            window.dispatchEvent(new CustomEvent("lesson-downloaded"));
           }
+          setDownloadingLessonId(null);
           return;
         }
         alert("Download failed");
+        setDownloadingLessonId(null);
         return;
       }
       if (!response.ok) {
         alert("Download failed");
+        setDownloadingLessonId(null);
         return;
       }
       // Download as blob (fallback)
@@ -192,6 +197,7 @@ const StudentProgressCard = () => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+      window.dispatchEvent(new CustomEvent("lesson-downloaded"));
     } catch (err) {
       alert("Download failed");
     } finally {
@@ -199,7 +205,13 @@ const StudentProgressCard = () => {
     }
   };
 
-  if (loading) return <div>Loading progress...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+      </div>
+    );
+  }
   if (error) return <div className="text-red-500">{error}</div>;
   if (!progresses.length) return <div>No progress found.</div>;
 

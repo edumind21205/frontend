@@ -184,9 +184,16 @@ export default function CertificateCard() {
                         disabled={loadingId === enr.student._id}
                         onClick={() => handleIssueCertificate(enr.student._id)}
                       >
-                        {loadingId === enr.student._id
-                          ? "Issuing..."
-                          : "Issue Certificate"}
+                        {loadingId === enr.student._id ? (
+                          <span className="flex items-center gap-2">
+                            <span>Issuing...</span>
+                            <span>
+                              <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-blue-200 border-t-blue-600"></span>
+                            </span>
+                          </span>
+                        ) : (
+                          "Issue Certificate"
+                        )}
                       </button>
                     )}
                   </li>

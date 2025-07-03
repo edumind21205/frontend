@@ -27,6 +27,7 @@ const DownloadPage = () => {
 
   // Refactor fetch logic into functions so we can call them on refresh
   const fetchLessons = useCallback(async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       let lessonsArr = [];
@@ -43,10 +44,13 @@ const DownloadPage = () => {
       setLessons(lessonsArr);
     } catch (err) {
       setError("Failed to fetch lessons");
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const fetchHistory = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("https://eduminds-production-180d.up.railway.app/api/download/history", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -60,6 +64,7 @@ const DownloadPage = () => {
   };
 
   const fetchCourses = useCallback(async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("https://eduminds-production-180d.up.railway.app/api/enrollments/enroll-courses", {
@@ -70,10 +75,13 @@ const DownloadPage = () => {
       setCourses(result.courses || []);
     } catch (err) {
       // Optionally handle error
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const fetchAllQuizzes = useCallback(async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("https://eduminds-production-180d.up.railway.app/api/quizzes/student/all", {
@@ -84,10 +92,13 @@ const DownloadPage = () => {
       setAllQuizzes(data.quizzes || []);
     } catch (err) {
       // Optionally handle error
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const fetchAllAssignments = useCallback(async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("https://eduminds-production-180d.up.railway.app/api/submissions/student/assignments", {
@@ -102,10 +113,13 @@ const DownloadPage = () => {
       setAllAssignments(assignmentsObj);
     } catch (err) {
       // Optionally handle error
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const fetchAssignmentMarks = useCallback(async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const res = await fetch("https://eduminds-production-180d.up.railway.app/api/submissions/student", {
@@ -124,6 +138,8 @@ const DownloadPage = () => {
       setAssignmentMarksMap(map);
     } catch (err) {
       // Optionally handle error
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -618,6 +634,23 @@ const DownloadPage = () => {
     }
   };
 
+  useEffect(() => {
+    const onLessonDownloaded = () => {
+      fetchHistory();
+    };
+    window.addEventListener("lesson-downloaded", onLessonDownloaded);
+    return () => window.removeEventListener("lesson-downloaded", onLessonDownloaded);
+  }, []);
+
+  // Loading spinner for the whole page
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <Searchbar/>
@@ -970,99 +1003,21 @@ const DownloadPage = () => {
                 })}
               </tbody>
             </table>
-            {/* Expand/Collapse Button for certificates table */}
+            {/* Expand/Collapse Button for certificates */}
             {filteredCourses.length > 2 && (
               <div className="flex justify-center mt-4">
                 <button
                   className="px-4 py-1 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition"
                   onClick={() => setShowAllCerts((prev) => !prev)}
                 >
-                  {showAllCerts ? "Show Less" : `Show All (${filteredCourses.length})`}
+                  {showAllCerts
+                    ? "Show Less"
+                    : `Show All (${filteredCourses.length})`}
                 </button>
               </div>
             )}
           </div>
         )}
-      </div>
-      {/* Certificates Section */}
-      <div className=" bg-white rounded-xl shadow-lg p-4 md:p-8 mt-10">
-        <h2 className="text-2xl font-bold mb-4 text-blue-700">Downloadable Certificates</h2>
-        {certLoading ? (
-          <div>Loading certificates...</div>
-        ) : certError ? (
-          <div className="text-red-500">{certError}</div>
-        ) : certificates.length === 0 ? (
-          <div>No certificates available yet.</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr className="bg-blue-100">
-                  <th className="p-3 text-left font-semibold text-gray-700">Course</th>
-                  <th className="p-3 text-left font-semibold text-gray-700">Organization</th>
-                  <th className="p-3 text-left font-semibold text-gray-700">Date Earned</th>
-                  <th className="p-3 text-left font-semibold text-gray-700">Certificate ID</th>
-                  <th className="p-3 text-left font-semibold text-gray-700">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(showAllDownloadableCerts ? certificates : certificates.slice(0, 2)).map(cert => (
-                  <tr key={cert.certificateId} className="hover:bg-blue-50 transition">
-                    <td className="p-3 font-medium text-gray-900">{cert.courseName}</td>
-                    <td className="p-3 text-gray-700">{cert.organization}</td>
-                    <td className="p-3 text-gray-700">{cert.dateEarned ? new Date(cert.dateEarned).toLocaleDateString() : ''}</td>
-                    <td className="p-3 text-xs text-gray-500">{cert.certificateId}</td>
-                    <td className="p-3">
-                      <button
-                        className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-4 py-2 rounded-lg shadow hover:from-blue-700 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
-                        onClick={() => handleDownloadCertificate(cert.courseId, cert.courseName)}
-                      >
-                        <span className="inline-block align-middle mr-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 inline"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"
-                            />
-                          </svg>
-                        </span>
-                        Download
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {/* Expand/Collapse Button for Downloadable Certificates table */}
-            {certificates.length > 2 && (
-              <div className="flex justify-center mt-4">
-                <button
-                  className="px-4 py-1 rounded bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition"
-                  onClick={() => setShowAllDownloadableCerts((prev) => !prev)}
-                >
-                  {showAllDownloadableCerts ? "Show Less" : `Show All (${certificates.length})`}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      <div className="flex justify-end mb-4">
-        {/* <button
-          className="px-3 py-1 rounded border bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
-          onClick={handleRefresh}
-          disabled={loading}
-          title="Refresh Data"
-        >
-          &#x21bb; Refresh
-        </button> */}
       </div>
     </div>
   );

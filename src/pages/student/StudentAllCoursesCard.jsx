@@ -101,7 +101,13 @@ export default function StudentAllCoursesCard() {
     fetchCourses();
   }, []);
 
-  if (loading) return <div className="p-4">Loading courses...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-opacity-50"></div>
+      </div>
+    );
+  }
   if (error) return <div className="p-4 text-red-500">{error}</div>;
   if (!courses.length) return <div className="p-4">No courses available at the moment.</div>;
 
