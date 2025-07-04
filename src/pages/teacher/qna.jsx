@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function QnA() {
   const [courses, setCourses] = useState([]);
@@ -137,6 +137,7 @@ const user = userStr ? JSON.parse(userStr) : null; // includes role, id, etc.
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      <ToastContainer />
       {/* Loading spinner */}
       {loading && (
         <div className="flex justify-center items-center py-10">
