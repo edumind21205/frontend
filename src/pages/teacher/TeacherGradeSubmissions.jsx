@@ -161,6 +161,13 @@ const TeacherGradeSubmissions = ({ assignmentId: propAssignmentId, onBack }) => 
   const handleAssignmentSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    // Validation: Prevent past deadline
+    const now = new Date();
+    const selectedDate = new Date(newAssignment.deadline);
+    if (!newAssignment.deadline || selectedDate < now) {
+      setMessage("Deadline must be a future date and time.");
+      return;
+    }
     try {
       const token = getToken();
       // Ensure deadline is in ISO format (YYYY-MM-DDTHH:MM)
@@ -335,6 +342,7 @@ const TeacherGradeSubmissions = ({ assignmentId: propAssignmentId, onBack }) => 
               value={newAssignment.deadline}
               onChange={e => handleAssignmentInput("deadline", e.target.value)}
               required
+              min={new Date().toISOString().slice(0, 16)}
             />
             <input
               type="number"

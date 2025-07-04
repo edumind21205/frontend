@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const StudentProgressCard = () => {
   const [progresses, setProgresses] = useState([]);
@@ -249,6 +248,7 @@ const StudentProgressCard = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 min-h-screen bg-gradient-to-br from-blue-50 to-white">
+      <ToastContainer />
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-blue-800 mb-2">Course Progress</h2>
